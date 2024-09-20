@@ -73,7 +73,8 @@ fviz_pca_var(backsamps.pca, col.var = "black")
  # - Select ind by names: select.ind = list(name = c("23", "42", "119") )
 fviz_pca_var(backsamps.pca, col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-             select.ind = list(contrib = 10), repel = TRUE) ##avoid text overlapping
+             select.var = list(contrib = 10), repel = TRUE) ##avoid text overlapping
+
 
 # contributions of variables to PC1
 fviz_contrib(backsamps.pca, choice = "var", axes = 1, top = 10)
