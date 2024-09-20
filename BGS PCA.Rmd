@@ -18,9 +18,9 @@ library(corrplot)
 
 ```{r load data, include = F}
 
-backsamps <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\Thesis Stats\\Thesis Stats\\Data\\Cleaned\\BGS SITE MATRIX.csv")
+backsamps <- read.csv("BGS SITE MATRIX.csv")
 
-agebacksamps <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\Thesis Stats\\Thesis Stats\\Data\\Cleaned\\BGS SITE MATRIX v2.csv")
+agebacksamps <- read.csv("BGS SITE MATRIX v2.csv")
 
 ```
 
