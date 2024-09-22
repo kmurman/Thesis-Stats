@@ -58,6 +58,7 @@ corrplot(var$cos2, is.corr = FALSE)
 
 fviz_cos2(backsamps.pca, choice = "var", axes = 1:2)
 
+# original archery target
 fviz_pca_var(backsamps.pca, col.var = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
 
 # graph of variables: default plot
@@ -66,11 +67,6 @@ fviz_pca_var(backsamps.pca, col.var = "black")
 
 # control variable colors using their contributions
 # *** this is the archery target plot, how to remove labels? I added the "select.ind" argument, but it is still extremely busy:
-# Select and visualize some individuals (ind) with select.ind argument.
- # - ind with cos2 >= 0.96: select.ind = list(cos2 = 0.96)
- # - Top 20 ind according to the cos2: select.ind = list(cos2 = 20)
- # - Top 20 contributing individuals: select.ind = list(contrib = 20)
- # - Select ind by names: select.ind = list(name = c("23", "42", "119") )
 fviz_pca_var(backsamps.pca, col.var = "contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              select.var = list(contrib = 10), repel = TRUE) ##avoid text overlapping
@@ -112,6 +108,11 @@ fviz_pca_ind(backsamps.pca, label = "none", habillage = as.factor(backsamps$seas
 fviz_pca_ind(backsamps.pca, label = "none", habillage = as.factor(backsamps$site), palette = c("#00AFBB", "#E7B800", "#FC4E07", "#032d70"), addEllipses = TRUE)
 
 fviz_pca(backsamps.pca, label = "none", geom.ind = "point", geom.var = "text")
+
+
+# trying to overlay the graph of individuals ~ sample type with the graph of variables (archery target) - should be able to do this with the biplot function (biplot of individuals and variables)
+
+fviz_pca_biplot(backsamps.pca, label = "var", select.var = list(contrib = 10), habillage = as.factor(backsamps$samp.type), addEllipses = TRUE, repel = TRUE, palette = c("#00AFBB", "#E7B800"))
 
 
 ```
