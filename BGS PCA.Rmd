@@ -126,7 +126,7 @@ com <- backsamps[,5:ncol(backsamps)]
 
 m_com <- as.matrix(com)
 
-# getting a new error message when I try to run this now...
+# "bray" is the dissimilarity measure (Bray-Curtis)
 
 anosim(x = m_com, grouping = backsamps$samp.type, permutations = 9999, distance = "bray")
 
