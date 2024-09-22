@@ -139,7 +139,7 @@ anosim(x = m_com, grouping = backsamps$samp.point, permutations = 9999, distance
 ```
 
 
-#PCA with taxa separated by age class.
+#PCA with taxa separated by age class. Don't worry about this for now.
 
 
 ```{r PCA with taxa by age class}
