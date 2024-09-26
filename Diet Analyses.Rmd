@@ -208,33 +208,59 @@ shapiro.test(GP_terrvol$VOLUME)
 ```{r kruskal wallis volume of prey category ~ species}
 
 # SVL
-kruskal.test(SVL ~ SPECIES, data = SVL)
-boxplot(SVL ~ SPECIES, data = SVL, xlab = "Species", ylab = "SVL (mm)")
-dunnTest(SVL ~ SPECIES, data = SVL)
+kruskal.test(SVL ~ SPECIES,
+             data = SVL)
+
+
+boxplot(SVL ~ SPECIES,
+        data = SVL,
+        xlab = "Species",
+        ylab = "SVL (mm)")
+
+dunnTest(SVL ~ SPECIES,
+         data = SVL)
 
 # prey volume consumed ~ species
 
-kruskal.test(VOLUME ~ SPECIES, data = totalvol_aquatic)
+kruskal.test(VOLUME ~ SPECIES,
+             data = totalvol_aquatic)
 
-kruskal.test(VOLUME ~ SPECIES, data = totalvol_int)
+kruskal.test(VOLUME ~ SPECIES,
+             data = totalvol_int)
 
-kruskal.test(VOLUME ~ SPECIES, data = totalvol_terr)
+kruskal.test(VOLUME ~ SPECIES,
+             data = totalvol_terr)
 
-kruskal.test(VOLUME ~ SPECIES, data = totalvol_neither)
+kruskal.test(VOLUME ~ SPECIES,
+             data = totalvol_neither)
 
 # these results are very different from what I got in posit cloud uploading a csv that was formatted in excel vs manipulating the data in R....
-dunnTest(VOLUME ~ SPECIES, data = totalvol_aquatic)
-dunnTest(VOLUME ~ SPECIES, data = totalvol_int)
-dunnTest(VOLUME ~ SPECIES, data = totalvol_terr)
+dunnTest(VOLUME ~ SPECIES,
+         data = totalvol_aquatic)
+
+dunnTest(VOLUME ~ SPECIES,
+         data = totalvol_int)
+
+dunnTest(VOLUME ~ SPECIES,
+         data = totalvol_terr)
 
 
 # dot plots of prey category volumes
 
-ggplot(totalvol_aquatic, aes(x = SPECIES, y = VOLUME)) + geom_jitter(width = 0.01, size = 8, alpha = 0.1,) + ggtitle("Aquatic Prey Volume")
+ggplot(totalvol_aquatic,
+       aes(x = SPECIES, y = VOLUME)) +
+       geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+       ggtitle("Aquatic Prey Volume")
 
-ggplot(totalvol_int, aes(x = SPECIES, y = VOLUME)) + geom_jitter(width = 0.01, size = 8, alpha = 0.1,) + ggtitle("Intermediate Prey Volume")
+ggplot(totalvol_int,
+       aes(x = SPECIES, y = VOLUME)) +
+       geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+       ggtitle("Intermediate Prey Volume")
 
-ggplot(totalvol_terr, aes(x = SPECIES, y = VOLUME)) + geom_jitter(width = 0.01, size = 8, alpha = 0.1,) + ggtitle("Terrestrial Prey Volume")
+ggplot(totalvol_terr,
+       aes(x = SPECIES, y = VOLUME)) +
+       geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+       ggtitle("Terrestrial Prey Volume")
 
 ```
 
