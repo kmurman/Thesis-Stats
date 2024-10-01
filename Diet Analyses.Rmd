@@ -4,6 +4,7 @@ author: "Kelly Murman"
 date: "`r Sys.Date()`"
 output: html_document
 ---
+# load packages
 
 ```{r load packages}
 
@@ -15,6 +16,8 @@ library(FSA)
 
 
 ```
+
+# load and manipulate data
 
 ```{r load data}
 
@@ -89,6 +92,8 @@ totalvol_neither <- totalvol_all %>% filter(PREY.CATEGORY %in% c("neither"))
 
 
 ```
+
+# normality testing
 
 ```{r normality testing}
 
@@ -205,6 +210,8 @@ shapiro.test(GP_terrvol$VOLUME)
 
 ```
 
+# kruskal wallis volume of prey category ~ species
+
 ```{r kruskal wallis volume of prey category ~ species}
 
 # SVL
@@ -263,6 +270,8 @@ ggplot(totalvol_terr,
        ggtitle("Terrestrial Prey Volume")
 
 ```
+
+# kruskal wallis volume of prey category ~ SVL
 
 ```{r kruskal wallis volume of prey category ~ SVL}
 
