@@ -13,6 +13,7 @@ library(vegan)
 library(stats)
 library(ggpubr)
 library(FSA)
+library(car)
 
 
 ```
@@ -89,6 +90,13 @@ totalvol_int <- totalvol_all %>% filter(PREY.CATEGORY %in% c("intermediate"))
 totalvol_terr <- totalvol_all %>% filter(PREY.CATEGORY %in% c("terrestrial"))
 
 totalvol_neither <- totalvol_all %>% filter(PREY.CATEGORY %in% c("neither"))
+
+
+# need a data frame with % prey categories
+
+percent_preyvolume <- read.csv("percent prey volumes.csv")
+
+
 
 
 ```
@@ -280,6 +288,12 @@ kruskal.test(VOLUME ~ SVL, data = totalvol_aquatic)
 kruskal.test(VOLUME ~ SVL, data = totalvol_int)
 
 kruskal.test(VOLUME ~ SVL, data = totalvol_terr)
+
+```
+
+```{r GLM on percent aquatic prey volume}
+
+glm <- car::Anova(glm(formula = percent.aquatic.vol ~ species + SVL + season, data = percent_preyvolume, family = binomial), type = 3)
 
 ```
 
