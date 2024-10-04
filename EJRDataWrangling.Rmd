@@ -1,0 +1,70 @@
+---
+title: "EJR Data Wrangling"
+author: "EJR"
+date: "2024-10-04"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#Load libraries
+```{r load packages}
+library(tidyverse)
+library(vegan)
+library(stats)
+library(ggpubr)
+library(FSA)
+library(car)
+```
+
+#Load data
+
+```{r load data}
+saldata_raw <- read.csv("MASTER SPECIMEN CATALOG.csv")
+```
+
+
+#Make summary table of diet volume by diet environment per salamander
+
+```{r}
+#filtering steps
+##keep only SAMPLING.METHOD == Flushed
+##remove TAXA == Unidentifiable Insect Parts *and* No gut contents
+##group by SPECIMEN.ID *and* PREY.CATEGORY
+##summarize total VOLUME
+
+dietvolume <- saldata_raw %>%
+  filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%  #add whatever columns need to be kept
+  summarize(VOLUME = sum(VOLUME))
+
+
+#separate prey category into columns, add value = 0 for any prey categories not observed for a specimen
+dietvolume_by_preycategory <- dietvolume %>%
+  pivot_wider(names_from = PREY.CATEGORY,
+              values_from = VOLUME,
+              values_fill = 0,
+              names_prefix= "volume_")
+
+#add total volume and calculate proportional volume for each prey category
+diet_prop <- dietvolume_by_preycategory %>%
+  mutate(volume_total = sum(c_across(starts_with("volume")), na.rm=T)) %>%
+  mutate(prop_aquatic = volume_aquatic/volume_total, 
+         prop_terrestrial = volume_terrestrial/volume_total, 
+         prop_intermediate = volume_intermediate/volume_total, 
+         prop_neither = volume_neither/volume_total)
+
+```
+
+
+#stats
+
+```{r}
+#aquatic
+kruskal.test(volume_aquatic ~ SPECIES,
+             data = dietvolume_by_preycategory)
+
+#add Dunn tests, replicate for each prey category
+
+```
