@@ -21,17 +21,26 @@ library(car)
 
 ```{r load data}
 saldata_raw <- read.csv("MASTER SPECIMEN CATALOG.csv")
+
+#see notes in sections below re: GLM
+dietnumber <- read.csv("diet ANOVA % aquatic.csv")
+
 ```
 
 
 #Make summary table of diet volume by diet environment per salamander
 
-```{r}
+```{r yee haw}
+#remove duplicates for SVL data
+SVL <- saldata_raw %>% select(SPECIES, SPECIMEN.ID, SVL) %>%
+  distinct()
+
 #filtering steps
 ##keep only SAMPLING.METHOD == Flushed
 ##remove TAXA == Unidentifiable Insect Parts *and* No gut contents
 ##group by SPECIMEN.ID *and* PREY.CATEGORY
 ##summarize total VOLUME
+
 
 dietvolume <- saldata_raw %>%
   filter(SAMPLING.METHOD %in% c('Flushed')) %>%
@@ -48,23 +57,112 @@ dietvolume_by_preycategory <- dietvolume %>%
               names_prefix= "volume_")
 
 #add total volume and calculate proportional volume for each prey category
-diet_prop <- dietvolume_by_preycategory %>%
+volume_diet_prop <- dietvolume_by_preycategory %>%
   mutate(volume_total = sum(c_across(starts_with("volume")), na.rm=T)) %>%
   mutate(prop_aquatic = volume_aquatic/volume_total, 
          prop_terrestrial = volume_terrestrial/volume_total, 
          prop_intermediate = volume_intermediate/volume_total, 
          prop_neither = volume_neither/volume_total)
 
+#trying to get R to count the number of times each prey category is consumed by each individual salamander to replicate the GLM that had significant results
+#I want to get R to do this, but for the sake of getting this analysis done, I am uploading the csv
+#dietnumber <- saldata_raw %>%
+ # filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  #filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  #group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
+  #group_by()
+
+  
+
 ```
 
 
 #stats
 
-```{r}
+```{r stats}
+kruskal.test(SVL ~ SPECIES,
+             data = SVL)
+
+#KW examining volume of prey cat consumed as a function of SPECIES
+
 #aquatic
 kruskal.test(volume_aquatic ~ SPECIES,
              data = dietvolume_by_preycategory)
 
-#add Dunn tests, replicate for each prey category
+dunnTest(volume_aquatic ~ SPECIES,
+         data = dietvolume_by_preycategory)
+
+#intermediate
+kruskal.test(volume_intermediate ~ SPECIES,
+             data = dietvolume_by_preycategory)
+
+dunnTest(volume_intermediate ~ SPECIES,
+         data = dietvolume_by_preycategory)
+
+#terrestrial
+kruskal.test(volume_terrestrial ~ SPECIES,
+             data = dietvolume_by_preycategory)
+
+dunnTest(volume_terrestrial ~ SPECIES,
+         data = dietvolume_by_preycategory)
+
+#neither
+kruskal.test(volume_neither ~ SPECIES,
+             data = dietvolume_by_preycategory)
+
+dunnTest(volume_neither ~ SPECIES,
+         data = dietvolume_by_preycategory)
+
+
+#KW examining volume of prey cat consumed as a function of SVL
+#running a dunn test using SVL seems like a lot?
+
+#aquatic
+kruskal.test(volume_aquatic ~ SVL,
+             data = dietvolume_by_preycategory)
+
+dunnTest(volume_aquatic ~ SVL,
+         data = dietvolume_by_preycategory)
+
+#intermediate
+kruskal.test(volume_intermediate ~ SVL,
+             data = dietvolume_by_preycategory)
+
+#terrestrial
+kruskal.test(volume_terrestrial ~ SVL,
+             data = dietvolume_by_preycategory)
+
+#neither
+kruskal.test(volume_neither ~ SVL,
+             data = dietvolume_by_preycategory)
+
+
+#KW examining % number of prey cat consumed as a function of SEASON
+kruskal.test(percent.aquatic ~ season,
+             data = dietnumber)
+
+#feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
+ggplot(dietnumber,
+  aes(x = season, y = percent.aquatic)) +
+  geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+  ggtitle("Aquatic Prey Volume")
+  
+
+
+```
+
+```{r GLM on percent aquatic prey volume}
+
+#still not significant and I think I figured out why. I think the file "diet ANOVA % aquatic" was originally used to run the GLM that gave significant results, and that was based on the NUMBER of each type of prey consumed, not the VOLUME.
+
+volume_glm <- car::Anova(glm(formula = prop_aquatic ~ SPECIES + SVL + SEASON,
+                      data = volume_diet_prop, family = binomial), type = 3)
+
+
+#uploaded that CSV and running GLM code on the proportion of NUMBER of prey type consumed
+#can't run with SVL because this was formatted from a pivot table using size class, need to get R to make this dataset but don't have time to figure it out right now
+
+number_glm <- car::Anova(glm(formula = percent.aquatic ~ species + season,
+                      data = dietnumber, family = binomial), type = 3)
 
 ```

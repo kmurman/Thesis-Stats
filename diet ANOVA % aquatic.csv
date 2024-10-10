@@ -1,0 +1,274 @@
+specimen,species,size.class,site,season,sum.aquatic,sum.intermediate,sum.terrestrial,percent.aquatic,percent.intermediate,percent.terrestrial
+KMM034,D. fuscus,medium,SGL 205,spring,0,0,1,0,0,1
+KMM068,D. fuscus,medium,SGL 205,spring,0,2,0,0,1,0
+KMM069,D. fuscus,medium,SGL 205,spring,0,0,2,0,0,1
+KMM035,D. fuscus,small,SGL 205,spring,0,0,1,0,0,1
+KMM043,D. fuscus,small,SGL 205,spring,0,0,1,0,0,1
+KMM057,D. fuscus,large,SGL 221,spring,0,0,8,0,0,1
+KMM001,D. fuscus,medium,SGL 221,spring,0,1,0,0,1,0
+KMM011,D. fuscus,medium,SGL 221,spring,0,0,2,0,0,1
+KMM053,D. fuscus,medium,SGL 221,spring,0,0,2,0,0,1
+KMM060,D. fuscus,medium,SGL 221,spring,0,0,14,0,0,1
+KMM009,D. fuscus,small,SGL 221,spring,0,0,1,0,0,1
+KMM020,D. ochrophaeus,medium,SGL 221,spring,0,0,1,0,0,1
+KMM018,D. ochrophaeus,small,SGL 221,spring,0,1,5,0,0.17,0.83
+KMM019,D. ochrophaeus,small,SGL 221,spring,0,0,1,0,0,1
+KMM022,D. ochrophaeus,small,SGL 221,spring,0,0,1,0,0,1
+KMM046,D. ochrophaeus,small,SGL 221,spring,0,1,4,0,0.2,0.8
+KMM047,D. ochrophaeus,small,SGL 221,spring,0,0,6,0,0,1
+KMM051,D. ochrophaeus,small,SGL 221,spring,0,0,2,0,0,1
+KMM045,E. bislineata,medium,SGL 205,spring,0,0,4,0,0,1
+KMM008,E. bislineata,medium,SGL 221,spring,0,0,1,0,0,1
+KMM004,E. bislineata,small,SGL 221,spring,0,1,0,0,1,0
+KMM016,E. bislineata,small,SGL 221,spring,0,0,2,0,0,1
+KMM017,D. ochrophaeus,medium,SGL 221,spring,1,0,0,1,0,0
+KMM048,D. ochrophaeus,small,SGL 221,spring,1,0,0,1,0,0
+KMM024,D. fuscus,medium,SGL 205,spring,1,0,5,0.17,0,0.83
+KMM010,D. fuscus,small,SGL 221,spring,1,0,5,0.17,0,0.83
+KMM040,D. fuscus,medium,SGL 205,spring,1,4,0,0.2,0.8,0
+KMM037,D. fuscus,large,SGL 205,spring,1,2,1,0.25,0.5,0.25
+KMM052,D. fuscus,medium,SGL 221,spring,1,0,3,0.25,0,0.75
+KMM025,D. fuscus,medium,SGL 205,spring,2,0,3,0.4,0,0.6
+KMM028,D. fuscus,small,SGL 205,spring,2,0,3,0.4,0,0.6
+KMM033,D. fuscus,small,SGL 205,spring,3,0,2,0.6,0,0.4
+KMM031,D. fuscus,small,SGL 205,spring,2,1,0,0.67,0.33,0
+KMM041,D. fuscus,small,SGL 205,spring,5,1,0,0.83,0.17,0
+KMM056,D. fuscus,small,SGL 221,spring,5,0,1,0.83,0,0.17
+KMM030,D. fuscus,medium,SGL 205,spring,3,0,0,1,0,0
+KMM067,D. fuscus,medium,SGL 205,spring,2,0,0,1,0,0
+KMM0124,D. fuscus,large,SGL 221,summer,0,0,3,0,0,1
+KMM0145,D. fuscus,large,SGL 221,summer,0,0,8,0,0,1
+KMM071,D. fuscus,large,SGL 221,summer,0,0,4,0,0,1
+KMM086,D. fuscus,large,SGL 221,summer,0,0,1,0,0,1
+KMM0100,D. fuscus,medium,SGL 221,summer,0,0,3,0,0,1
+KMM0146,D. fuscus,medium,SGL 221,summer,0,4,6,0,0.4,0.6
+KMM0147,D. fuscus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM0148,D. fuscus,medium,SGL 221,summer,0,0,1,0,0,1
+KMM070,D. fuscus,medium,SGL 221,summer,0,1,1,0,0.5,0.5
+KMM094,D. fuscus,medium,SGL 221,summer,0,0,1,0,0,1
+KMM095,D. fuscus,small,SGL 221,summer,0,0,1,0,0,1
+KMM0106,D. fuscus,medium,STAC,summer,0,0,1,0,0,1
+KMM0112,D. fuscus,medium,STAC,summer,0,0,1,0,0,1
+KMM0117,D. fuscus,medium,STAC,summer,0,0,1,0,0,1
+KMM0119,D. fuscus,medium,STAC,summer,0,2,4,0,0.33,0.67
+KMM083,D. fuscus,medium,STAC,summer,0,1,3,0,0.25,0.75
+KMM0108,D. fuscus,small,STAC,summer,0,0,1,0,0,1
+KMM0113,D. fuscus,small,STAC,summer,0,0,5,0,0,1
+KMM0121,D. fuscus,small,STAC,summer,0,0,1,0,0,1
+KMM0153,D. fuscus,small,STAC,summer,0,0,2,0,0,1
+KMM0103,D. ochrophaeus,medium,SGL 221,summer,0,1,0,0,1,0
+KMM0105,D. ochrophaeus,medium,SGL 221,summer,0,0,1,0,0,1
+KMM0140,D. ochrophaeus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM072,D. ochrophaeus,medium,SGL 221,summer,0,0,6,0,0,1
+KMM081,D. ochrophaeus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM092,D. ochrophaeus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM098,D. ochrophaeus,medium,SGL 221,summer,0,0,4,0,0,1
+KMM0129,D. ochrophaeus,small,SGL 221,summer,0,1,8,0,0.11,0.89
+KMM0144,D. ochrophaeus,small,SGL 221,summer,0,1,0,0,1,0
+KMM073,D. ochrophaeus,small,SGL 221,summer,0,0,2,0,0,1
+KMM078,D. ochrophaeus,small,SGL 221,summer,0,1,0,0,1,0
+KMM091,D. ochrophaeus,small,SGL 221,summer,0,0,1,0,0,1
+KMM0122,E. bislineata,medium,SGL 221,summer,0,0,5,0,0,1
+KMM0136,E. bislineata,medium,SGL 221,summer,0,4,3,0,0.57,0.43
+KMM0125,E. bislineata,small,SGL 221,summer,0,0,2,0,0,1
+KMM0135,E. bislineata,small,SGL 221,summer,0,0,6,0,0,1
+KMM0137,E. bislineata,small,SGL 221,summer,0,0,6,0,0,1
+KMM0138,E. bislineata,small,SGL 221,summer,0,1,8,0,0.11,0.89
+KMM0139,E. bislineata,small,SGL 221,summer,0,0,4,0,0,1
+KMM0118,E. bislineata,medium,STAC,summer,0,0,19,0,0,1
+KMM0152,E. bislineata,medium,STAC,summer,0,0,2,0,0,1
+KMM0110,E. bislineata,small,STAC,summer,0,0,1,0,0,1
+KMM0111,E. bislineata,small,STAC,summer,0,0,2,0,0,1
+KMM0149,E. bislineata,small,STAC,summer,0,0,5,0,0,1
+KMM0151,E. bislineata,small,STAC,summer,0,0,2,0,0,1
+KMM0127,D. ochrophaeus,small,SGL 221,summer,1,0,7,0.13,0,0.88
+KMM0134,D. ochrophaeus,small,SGL 221,summer,1,0,4,0.2,0,0.8
+KMM0132,D. ochrophaeus,small,SGL 221,summer,3,1,8,0.25,0.08,0.67
+KMM0130,E. bislineata,medium,SGL 221,summer,2,0,5,0.29,0,0.71
+KMM0143,D. ochrophaeus,medium,SGL 221,summer,1,0,2,0.33,0,0.67
+KMM0150,E. bislineata,small,STAC,summer,2,0,1,0.67,0,0.33
+KMM0142,D. ochrophaeus,medium,SGL 221,summer,1,0,0,1,0,0
+KMM079,D. fuscus,small,SGL 221,summer,1,0,2,0.33,0,0.67
+KMM085,D. fuscus,small,STAC,summer,1,0,2,0.33,0,0.67
+KMM0133,D. fuscus,large,SGL 221,summer,1,0,1,0.5,0,0.5
+KMM075,D. fuscus,medium,SGL 221,summer,1,1,0,0.5,0.5,0
+KMM076,D. fuscus,medium,SGL 221,summer,2,0,2,0.5,0,0.5
+KMM084,D. fuscus,medium,STAC,summer,1,0,0,1,0,0
+KMM0181,D. fuscus,medium,SGL 221,fall,0,1,2,0,0.33,0.67
+KMM0154,D. fuscus,medium,STAC,fall,0,1,0,0,1,0
+KMM0193,D. fuscus,medium,STAC,fall,0,0,1,0,0,1
+KMM0158,D. fuscus,small,STAC,fall,0,0,1,0,0,1
+KMM0208,D. fuscus,small,STAC,fall,0,1,0,0,1,0
+KMM0187,D. ochrophaeus,small,SGL 221,fall,0,0,5,0,0,1
+KMM0189,D. ochrophaeus,small,SGL 221,fall,0,0,1,0,0,1
+KMM0190,D. ochrophaeus,small,SGL 221,fall,0,0,1,0,0,1
+KMM0197,D. ochrophaeus,small,SGL 221,fall,0,0,3,0,0,1
+KMM0199,D. ochrophaeus,small,SGL 221,fall,0,0,7,0,0,1
+KMM0200,D. ochrophaeus,small,SGL 221,fall,0,0,3,0,0,1
+KMM0203,D. ochrophaeus,small,SGL 221,fall,0,0,1,0,0,1
+KMM0220,D. ochrophaeus,small,SGL 221,fall,0,0,3,0,0,1
+KMM0161,E. bislineata,small,SGL 221,fall,0,0,3,0,0,1
+KMM0162,E. bislineata,small,SGL 221,fall,0,0,1,0,0,1
+KMM0164,E. bislineata,small,SGL 221,fall,0,0,5,0,0,1
+KMM0165,E. bislineata,small,SGL 221,fall,0,1,0,0,1,0
+KMM0169,E. bislineata,small,SGL 221,fall,0,0,1,0,0,1
+KMM0173,E. bislineata,small,SGL 221,fall,0,1,3,0,0.25,0.75
+KMM0176,E. bislineata,small,SGL 221,fall,0,0,2,0,0,1
+KMM0179,E. bislineata,small,SGL 221,fall,0,0,2,0,0,1
+KMM0180,E. bislineata,small,SGL 221,fall,0,0,2,0,0,1
+KMM0182,E. bislineata,small,SGL 221,fall,0,0,1,0,0,1
+KMM0188,E. bislineata,small,SGL 221,fall,0,0,2,0,0,1
+KMM0221,E. bislineata,small,SGL 221,fall,0,0,16,0,0,1
+KMM0222,E. bislineata,small,SGL 221,fall,0,0,5,0,0,1
+KMM0223,E. bislineata,small,SGL 221,fall,0,1,4,0,0.2,0.8
+KMM0224,E. bislineata,small,SGL 221,fall,0,0,3,0,0,1
+KMM0225,E. bislineata,small,SGL 221,fall,0,0,9,0,0,1
+KMM0226,E. bislineata,small,SGL 221,fall,0,1,3,0,0.25,0.75
+KMM0215,E. bislineata,medium,STAC,fall,0,0,11,0,0,1
+KMM0155,E. bislineata,small,STAC,fall,0,0,2,0,0,1
+KMM0157,E. bislineata,small,STAC,fall,0,1,5,0,0.17,0.83
+KMM0192,E. bislineata,small,STAC,fall,0,1,3,0,0.25,0.75
+KMM0195,E. bislineata,small,STAC,fall,0,1,3,0,0.25,0.75
+KMM0206,E. bislineata,small,STAC,fall,0,0,4,0,0,1
+KMM0207,E. bislineata,small,STAC,fall,0,0,18,0,0,1
+KMM0209,E. bislineata,small,STAC,fall,0,0,32,0,0,1
+KMM0210,E. bislineata,small,STAC,fall,0,1,13,0,0.07,0.93
+KMM0214,E. bislineata,small,STAC,fall,0,0,7,0,0,1
+KMM0216,E. bislineata,small,STAC,fall,0,0,30,0,0,1
+KMM0229,E. bislineata,small,STAC,fall,0,0,7,0,0,1
+KMM0230,E. bislineata,small,STAC,fall,0,0,1,0,0,1
+KMM0211,E. bislineata,medium,STAC,fall,1,0,40,0.02,0,0.98
+KMM0213,E. bislineata,small,STAC,fall,1,0,13,0.07,0,0.93
+KMM0177,E. bislineata,small,SGL 221,fall,1,0,11,0.08,0,0.92
+KMM0212,E. bislineata,small,STAC,fall,2,2,20,0.08,0.08,0.83
+KMM0218,E. bislineata,small,STAC,fall,2,0,13,0.13,0,0.87
+KMM0170,E. bislineata,medium,SGL 221,fall,1,0,3,0.25,0,0.75
+KMM0174,E. bislineata,small,SGL 221,fall,1,0,2,0.33,0,0.67
+KMM0163,E. bislineata,small,SGL 221,fall,6,0,5,0.55,0,0.45
+KMM0202,D. ochrophaeus,small,SGL 221,fall,1,0,0,1,0,0
+KMM0191,D. fuscus,small,STAC,fall,1,1,2,0.25,0.25,0.5
+KMM0194,D. fuscus,small,STAC,fall,1,0,1,0.5,0,0.5
+KMM0204,D. fuscus,small,SGL 221,fall,2,0,0,1,0,0
+KMM0265,D. fuscus,large,SGL 221,spring,0,0,3,0,0,1
+KMM0279,D. fuscus,large,SGL 221,spring,0,0,2,0,0,1
+KMM0244,D. fuscus,medium,SGL 221,spring,0,0,5,0,0,1
+KMM0274,D. fuscus,medium,SGL 221,spring,0,0,5,0,0,1
+KMM0291,D. fuscus,medium,SGL 221,spring,0,0,5,0,0,1
+KMM0293,D. fuscus,medium,SGL 221,spring,0,0,5,0,0,1
+KMM0282,D. fuscus,small,SGL 221,spring,0,0,5,0,0,1
+KMM0240,D. ochrophaeus,medium,SGL 221,spring,0,0,1,0,0,1
+KMM0264,D. ochrophaeus,medium,SGL 221,spring,0,0,2,0,0,1
+KMM0269,D. ochrophaeus,medium,SGL 221,spring,0,0,8,0,0,1
+KMM0276,D. ochrophaeus,medium,SGL 221,spring,0,0,3,0,0,1
+KMM0267,D. ochrophaeus,small,SGL 221,spring,0,0,2,0,0,1
+KMM0268,D. ochrophaeus,small,SGL 221,spring,0,0,4,0,0,1
+KMM0272,D. ochrophaeus,small,SGL 221,spring,0,0,4,0,0,1
+KMM0275,D. ochrophaeus,small,SGL 221,spring,0,0,7,0,0,1
+KMM0289,D. ochrophaeus,small,SGL 221,spring,0,0,5,0,0,1
+KMM0249,D. ochrophaeus,medium,SGL 57,spring,0,0,4,0,0,1
+KMM0261,D. ochrophaeus,medium,SGL 57,spring,0,0,4,0,0,1
+KMM0263,D. ochrophaeus,medium,SGL 57,spring,0,0,20,0,0,1
+KMM0292,E. bislineata,small,SGL 221,spring,0,0,9,0,0,1
+KMM0271,D. ochrophaeus,medium,SGL 221,spring,1,0,12,0.08,0,0.92
+KMM0242,D. ochrophaeus,small,SGL 221,spring,1,0,11,0.08,0,0.92
+KMM0277,D. ochrophaeus,small,SGL 221,spring,1,0,9,0.1,0,0.9
+KMM0243,E. bislineata,small,SGL 221,spring,1,0,6,0.14,0,0.86
+KMM0285,D. ochrophaeus,small,SGL 221,spring,1,0,5,0.17,0,0.83
+KMM0252,D. ochrophaeus,small,SGL 57,spring,1,3,2,0.17,0.5,0.33
+KMM0253,D. ochrophaeus,small,SGL 57,spring,1,1,3,0.2,0.2,0.6
+KMM0280,D. ochrophaeus,medium,SGL 221,spring,1,1,2,0.25,0.25,0.5
+KMM0248,D. ochrophaeus,small,SGL 57,spring,2,4,1,0.29,0.57,0.14
+KMM0286,D. ochrophaeus,small,SGL 221,spring,1,0,2,0.33,0,0.67
+KMM0259,D. ochrophaeus,medium,SGL 57,spring,5,2,4,0.45,0.18,0.36
+KMM0237,D. ochrophaeus,medium,SGL 57,spring,1,0,1,0.5,0,0.5
+KMM0258,D. ochrophaeus,medium,SGL 57,spring,2,0,2,0.5,0,0.5
+KMM0234,D. ochrophaeus,small,SGL 57,spring,7,0,7,0.5,0,0.5
+KMM0235,D. ochrophaeus,small,SGL 57,spring,3,0,3,0.5,0,0.5
+KMM0254,D. ochrophaeus,small,SGL 57,spring,6,0,6,0.5,0,0.5
+KMM0250,D. ochrophaeus,small,SGL 57,spring,8,0,7,0.53,0,0.47
+KMM0236,D. ochrophaeus,small,SGL 57,spring,2,0,1,0.67,0,0.33
+KMM0256,D. ochrophaeus,medium,SGL 57,spring,4,0,1,0.8,0,0.2
+KMM0233,D. ochrophaeus,small,SGL 57,spring,8,1,1,0.8,0.1,0.1
+KMM0251,D. ochrophaeus,small,SGL 57,spring,10,1,1,0.83,0.08,0.08
+KMM0260,D. ochrophaeus,small,SGL 57,spring,2,0,0,1,0,0
+KMM0241,E. bislineata,small,SGL 221,spring,1,0,0,1,0,0
+KMM0238,D. fuscus,small,SGL 221,spring,1,0,49,0.02,0,0.98
+KMM0287,D. fuscus,medium,SGL 221,spring,1,0,8,0.11,0,0.89
+KMM0273,D. fuscus,large,SGL 221,spring,3,0,10,0.23,0,0.77
+KMM0283,D. fuscus,large,SGL 221,spring,2,0,5,0.29,0,0.71
+KMM0281,D. fuscus,small,SGL 221,spring,2,1,3,0.33,0.17,0.5
+KMM0284,D. fuscus,large,SGL 221,spring,4,2,3,0.44,0.22,0.33
+KMM0246,D. fuscus,large,SGL 221,spring,2,0,2,0.5,0,0.5
+KMM0232,D. fuscus,small,SGL 57,spring,3,0,2,0.6,0,0.4
+KMM0309,D. fuscus,medium,HECR,summer,0,0,1,0,0,1
+KMM0316,D. fuscus,large,SGL 221,summer,0,0,3,0,0,1
+KMM0296,D. fuscus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM0297,D. fuscus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM0315,D. fuscus,medium,SGL 221,summer,0,0,4,0,0,1
+KMM0318,D. fuscus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM0321,D. fuscus,medium,SGL 221,summer,0,2,6,0,0.25,0.75
+KMM0295,D. ochrophaeus,medium,SGL 221,summer,0,0,5,0,0,1
+KMM0313,D. ochrophaeus,medium,SGL 221,summer,0,0,1,0,0,1
+KMM0319,D. ochrophaeus,medium,SGL 221,summer,0,1,9,0,0.1,0.9
+KMM0325,D. ochrophaeus,medium,SGL 221,summer,0,1,1,0,0.5,0.5
+KMM0330,D. ochrophaeus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM0331,D. ochrophaeus,medium,SGL 221,summer,0,1,0,0,1,0
+KMM0333,D. ochrophaeus,medium,SGL 221,summer,0,0,2,0,0,1
+KMM0334,D. ochrophaeus,medium,SGL 221,summer,0,0,3,0,0,1
+KMM0314,D. ochrophaeus,small,SGL 221,summer,0,3,3,0,0.5,0.5
+KMM0323,D. ochrophaeus,small,SGL 221,summer,0,0,1,0,0,1
+KMM0324,D. ochrophaeus,small,SGL 221,summer,0,0,2,0,0,1
+KMM0336,D. ochrophaeus,small,SGL 221,summer,0,0,4,0,0,1
+KMM0337,D. ochrophaeus,small,SGL 221,summer,0,0,3,0,0,1
+KMM0298,E. bislineata,medium,HECR,summer,0,0,5,0,0,1
+KMM0303,E. bislineata,medium,HECR,summer,0,0,1,0,0,1
+KMM0301,E. bislineata,small,HECR,summer,0,0,7,0,0,1
+KMM0304,E. bislineata,small,HECR,summer,0,0,2,0,0,1
+KMM0305,E. bislineata,small,HECR,summer,0,1,3,0,0.25,0.75
+KMM0306,E. bislineata,small,HECR,summer,0,0,1,0,0,1
+KMM0332,E. bislineata,medium,SGL 221,summer,0,0,3,0,0,1
+KMM0311,D. ochrophaeus,medium,SGL 221,summer,1,1,16,0.06,0.06,0.89
+KMM0335,D. ochrophaeus,medium,SGL 221,summer,1,0,4,0.2,0,0.8
+KMM0300,E. bislineata,small,HECR,summer,1,0,2,0.33,0,0.67
+KMM0294,D. fuscus,large,SGL 221,summer,1,2,3,0.17,0.33,0.5
+KMM0312,D. fuscus,large,SGL 221,summer,2,1,3,0.33,0.17,0.5
+KMM0386,D. fuscus,medium,SGL 221,fall,0,0,4,0,0,1
+KMM0340,D. fuscus,small,SGL 221,fall,0,0,2,0,0,1
+KMM0347,D. fuscus,small,SGL 221,fall,0,0,1,0,0,1
+KMM0351,D. fuscus,small,SGL 221,fall,0,0,2,0,0,1
+KMM0343,D. ochrophaeus,medium,SGL 221,fall,0,0,2,0,0,1
+KMM0359,D. ochrophaeus,medium,SGL 221,fall,0,0,3,0,0,1
+KMM0363,D. ochrophaeus,medium,SGL 221,fall,0,0,2,0,0,1
+KMM0371,D. ochrophaeus,medium,SGL 221,fall,0,0,2,0,0,1
+KMM0388,D. ochrophaeus,medium,SGL 221,fall,0,0,2,0,0,1
+KMM0345,D. ochrophaeus,small,SGL 221,fall,0,0,1,0,0,1
+KMM0364,D. ochrophaeus,small,SGL 221,fall,0,0,2,0,0,1
+KMM0385,D. ochrophaeus,small,SGL 221,fall,0,0,4,0,0,1
+KMM0338,E. bislineata,medium,SGL 221,fall,0,0,2,0,0,1
+KMM0377,E. bislineata,medium,SGL 221,fall,0,1,7,0,0.13,0.88
+KMM0339,E. bislineata,small,SGL 221,fall,0,0,2,0,0,1
+KMM0342,E. bislineata,small,SGL 221,fall,0,0,3,0,0,1
+KMM0353,E. bislineata,small,SGL 221,fall,0,0,3,0,0,1
+KMM0356,E. bislineata,small,SGL 221,fall,0,0,5,0,0,1
+KMM0365,E. bislineata,small,SGL 221,fall,0,0,8,0,0,1
+KMM0366,E. bislineata,small,SGL 221,fall,0,1,2,0,0.33,0.67
+KMM0368,E. bislineata,small,SGL 221,fall,0,0,3,0,0,1
+KMM0375,E. bislineata,small,SGL 221,fall,0,0,2,0,0,1
+KMM0379,E. bislineata,small,SGL 221,fall,0,4,6,0,0.4,0.6
+KMM0387,D. ochrophaeus,medium,SGL 221,fall,1,0,9,0.1,0,0.9
+KMM0357,E. bislineata,medium,SGL 221,fall,1,2,5,0.13,0.25,0.63
+KMM0352,E. bislineata,small,SGL 221,fall,1,0,7,0.13,0,0.88
+KMM0360,D. ochrophaeus,medium,SGL 221,fall,1,1,5,0.14,0.14,0.71
+KMM0367,E. bislineata,small,SGL 221,fall,1,0,6,0.14,0,0.86
+KMM0381,D. ochrophaeus,medium,SGL 221,fall,1,1,4,0.17,0.17,0.67
+KMM0376,E. bislineata,medium,SGL 221,fall,2,1,9,0.17,0.08,0.75
+KMM0374,E. bislineata,medium,SGL 221,fall,1,0,2,0.33,0,0.67
+KMM0384,D. ochrophaeus,medium,SGL 221,fall,1,0,1,0.5,0,0.5
+KMM0369,E. bislineata,small,SGL 221,fall,10,0,2,0.83,0,0.17
+KMM0344,D. ochrophaeus,medium,SGL 221,fall,2,0,0,1,0,0
+KMM0355,E. bislineata,medium,SGL 221,fall,2,0,0,1,0,0
+KMM0378,D. fuscus,large,SGL 221,fall,1,0,5,0.17,0,0.83
+KMM0383,D. fuscus,large,SGL 221,fall,1,0,2,0.33,0,0.67
+KMM0348,D. fuscus,small,SGL 221,fall,2,0,2,0.5,0,0.5
+KMM0362,D. fuscus,small,SGL 221,fall,1,0,1,0.5,0,0.5
+KMM0341,D. fuscus,large,SGL 221,fall,2,0,1,0.67,0,0.33
