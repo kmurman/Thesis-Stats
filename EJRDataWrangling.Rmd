@@ -72,8 +72,53 @@ volume_diet_prop <- dietvolume_by_preycategory %>%
   #group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
   #group_by()
 
-  
 
+prey_category_count <- saldata_raw %>%
+  filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
+  summarize(n = n()) %>%
+  pivot_wider(names_from = PREY.CATEGORY, 
+              values_from = n,
+              values_fill = 0,
+              names_prefix = "count_") %>%
+  mutate(count_total = sum(c_across(starts_with("count")), na.rm=T)) %>%
+  mutate(propcount_aquatic = count_aquatic/count_total, 
+         propcount_terrestrial = count_terrestrial/count_total, 
+         propcount_intermediate = count_intermediate/count_total, 
+         propcount_neither = count_neither/count_total)
+```
+
+
+workflow for background sample count by prey category comparison
+```{r}
+#keep counts from prey_category_count
+#group by season
+#sum total number prey eaten within each category for each season
+
+prey_count_totals <- prey_category_count %>%
+  group_by(SEASON) %>%
+  summarize(total_aquatic = sum(count_aquatic),
+            total_terrestrial = sum(count_terrestrial),
+            total_intermediate = sum(count_intermediate),
+            total_neither = sum(count_neither))
+
+
+#from background samples
+#group by season
+#sum total number prey items observed from each prey category for each season
+
+#need to add prey category to BGS MASTER LIST, will proceed from here when updated
+background <- read.csv("BGS MASTER LIST.csv")
+
+#get total prey eaten (sum of all categories) from salamanders - per season
+#get total prey items documented (sum of all categories) from background - per season
+#get proportion of total prey items documented from each category (prop of total) - per season
+
+
+#calculate 'expected' number of prey eaten based on the total documented and category proportions
+
+#chi squared - salamander diets are observed, background estimated counts from proportions are expected
 ```
 
 
