@@ -186,6 +186,11 @@ kruskal.test(volume_neither ~ SVL,
 kruskal.test(percent.aquatic ~ season,
              data = dietnumber)
 
+
+dunnTest(percent.aquatic ~ season,
+         data = dietnumber)
+
+
 #feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
 ggplot(dietnumber,
   aes(x = season, y = percent.aquatic)) +
