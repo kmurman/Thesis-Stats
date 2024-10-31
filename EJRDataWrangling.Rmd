@@ -28,7 +28,7 @@ dietnumber <- read.csv("diet ANOVA % aquatic.csv")
 ```
 
 
-#Make summary table of diet volume by diet environment per salamander
+#Make summary table of diet volume and number by diet environment per salamander
 
 ```{r yee haw}
 #remove duplicates for SVL data
@@ -212,7 +212,7 @@ volume_glm <- car::Anova(glm(formula = prop_aquatic ~ SPECIES + SVL + SEASON,
 #uploaded that CSV and running GLM code on the proportion of NUMBER of prey type consumed
 #can't run with SVL because this was formatted from a pivot table using size class, need to get R to make this dataset but don't have time to figure it out right now
 
-number_glm <- car::Anova(glm(formula = percent.aquatic ~ species + season,
-                      data = dietnumber, family = binomial), type = 3)
+number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
+                      data = prey_category_count, family = binomial), type = 3)
 
 ```
