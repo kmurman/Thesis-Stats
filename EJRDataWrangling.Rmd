@@ -183,12 +183,12 @@ kruskal.test(volume_neither ~ SVL,
 
 
 #KW examining % number of prey cat consumed as a function of SEASON
-kruskal.test(percent.aquatic ~ season,
-             data = dietnumber)
+kruskal.test(propcount_aquatic ~ SEASON,
+             data = prey_category_count)
 
 
-dunnTest(percent.aquatic ~ season,
-         data = dietnumber)
+dunnTest(propcount_aquatic ~ SEASON,
+         data = prey_category_count)
 
 
 #feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
@@ -197,7 +197,24 @@ ggplot(dietnumber,
   geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
   ggtitle("Aquatic Prey Volume")
   
+#KW looking at NUMBER of prey cat consumed as function of SPECIES
+kruskal.test(count_aquatic ~ SPECIES,
+             data = prey_category_count)
 
+dunnTest(propcount_aquatic ~ SPECIES,
+         data = prey_category_count)
+
+kruskal.test(count_intermediate ~ SPECIES,
+             data = prey_category_count)
+
+dunnTest(propcount_intermediate ~ SPECIES,
+         data = prey_category_count)
+
+kruskal.test(count_terrestrial ~ SPECIES,
+             data = prey_category_count)
+
+dunnTest(propcount_terrestrial ~ SPECIES,
+         data = prey_category_count)
 
 ```
 
