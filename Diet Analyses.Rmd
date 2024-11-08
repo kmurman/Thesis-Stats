@@ -1,301 +1,245 @@
 ---
-title: "diet analyses"
+title: "Diet Analyses"
 author: "Kelly Murman"
 date: "`r Sys.Date()`"
 output: html_document
-editor_options: 
-  chunk_output_type: console
 ---
-# load packages
 
+#Load libraries
 ```{r load packages}
-
 library(tidyverse)
 library(vegan)
 library(stats)
 library(ggpubr)
 library(FSA)
 library(car)
-
-
 ```
 
-# load and manipulate data
+#Load data
 
 ```{r load data}
-
 saldata_raw <- read.csv("MASTER SPECIMEN CATALOG.csv")
 
-
-# separating SVL by species
-SVL <- saldata_raw %>% select(SPECIES, SPECIMEN.ID, SVL)
-
-SVL <- SVL %>% distinct()
-
-DF_SVL <- SVL %>% filter(SPECIES %in% c("D. fuscus"))
-
-DO_SVL <- SVL %>% filter(SPECIES %in% c("D. ochrophaeus"))
-
-EB_SVL <- SVL %>% filter(SPECIES %in% c("E. bislineata"))
-
-GP_SVL <- SVL %>% filter(SPECIES %in% c("G. porphyriticus"))
-
-
-# separating volume of prey categories consumed by species, dissected results, unidentifiable records, and individuals with no gut contents
-
-preyvol <- saldata_raw %>% select(SPECIES, SPECIMEN.ID, SVL, SAMPLING.METHOD, TAXA, PREY.CATEGORY, VOLUME)
-
-preyvol <- preyvol[-grep("Unidentifiable Insect Parts", preyvol$TAXA), ]
-
-preyvol <- preyvol[-grep("No gut contents", preyvol$TAXA), ]
-
-preyvol <- preyvol[-grep("stomach", preyvol$SAMPLING.METHOD), ]
-
-preyvol <- preyvol[-grep("small intestine", preyvol$SAMPLING.METHOD), ]
-
-preyvol <- preyvol[-grep("large intestine", preyvol$SAMPLING.METHOD), ]
-
-# all the noise filtered out, now breaking down by species
-
-preyvol <- preyvol %>% select(SPECIES, SPECIMEN.ID, SVL, TAXA, PREY.CATEGORY, VOLUME)
-
-DF_preyvol <- preyvol %>% filter(SPECIES %in% c("D. fuscus"))
-DF_aquaticvol <- DF_preyvol %>% filter(PREY.CATEGORY %in% c("aquatic"))
-DF_intvol <- DF_preyvol %>% filter(PREY.CATEGORY %in% c("intermediate"))
-DF_terrvol <- DF_preyvol %>% filter(PREY.CATEGORY %in% c("terrestrial"))
-DF_neither <- DF_preyvol %>% filter(PREY.CATEGORY %in% c("neither"))
-
-DO_preyvol <- preyvol %>% filter(SPECIES %in% c("D. ochrophaeus"))
-DO_aquaticvol <- DO_preyvol %>% filter(PREY.CATEGORY %in% c("aquatic"))
-DO_intvol <- DO_preyvol %>% filter(PREY.CATEGORY %in% c("intermediate"))
-DO_terrvol <- DO_preyvol %>% filter(PREY.CATEGORY %in% c("terrestrial"))
-DO_neither <- DO_preyvol %>% filter(PREY.CATEGORY %in% c("neither"))
-
-EB_preyvol <- preyvol %>% filter(SPECIES %in% c("E. bislineata"))
-EB_aquaticvol <- EB_preyvol %>% filter(PREY.CATEGORY %in% c("aquatic"))
-EB_intvol <- EB_preyvol %>% filter(PREY.CATEGORY %in% c("intermediate"))
-EB_terrvol <- EB_preyvol %>% filter(PREY.CATEGORY %in% c("terrestrial"))
-EB_neither <- EB_preyvol %>% filter(PREY.CATEGORY %in% c("neither"))
-
-# GP consumed only terrestrial prey
-GP_preyvol <- preyvol %>% filter(SPECIES %in% c("G. porphyriticus"))
-GP_terrvol <- GP_preyvol %>% filter(PREY.CATEGORY %in% c("terrestrial"))
-
-# combining volume data frames
-
-totalvol_all <- rbind(DF_aquaticvol, DF_intvol, DF_neither, DF_terrvol, DO_aquaticvol, DO_intvol, DO_neither, DO_terrvol, EB_aquaticvol, EB_intvol, EB_neither, EB_terrvol, GP_terrvol)
-
-totalvol_aquatic <- totalvol_all %>% filter(PREY.CATEGORY %in% c("aquatic"))
-
-totalvol_int <- totalvol_all %>% filter(PREY.CATEGORY %in% c("intermediate"))
-
-totalvol_terr <- totalvol_all %>% filter(PREY.CATEGORY %in% c("terrestrial"))
-
-totalvol_neither <- totalvol_all %>% filter(PREY.CATEGORY %in% c("neither"))
-
-
-# need a data frame with % prey categories
-
-percent_preyvolume <- read.csv("percent prey volumes.csv")
-
-
-
+background <- read.csv("BGS MASTER LIST.csv")
 
 ```
 
-# normality testing
+#Make summary table of diet volume and number by diet environment per salamander
 
-```{r normality testing}
+```{r yee haw}
+#remove duplicates for SVL data
+SVL <- saldata_raw %>% select(SPECIES, SPECIMEN.ID, SVL) %>%
+  distinct()
 
-# visualizing distribution of salamander SVL
-
-ggdensity(DF_SVL$SVL, xlab = "D. fuscus SVL (mm)")
-
-ggqqplot(DF_SVL$SVL, title = "D. fuscus SVL (mm)")
-
-ggdensity(DO_SVL$SVL, xlab = "D. ochrophaeus SVL (mm)")
-
-ggqqplot(DO_SVL$SVL, title = "D. ochrophaeus SVL (mm)")
-
-ggdensity(EB_SVL$SVL, xlab = "E. bislineata SVL (mm)")
-
-ggqqplot(EB_SVL$SVL, title = "E. bislineata SVL (mm)")
-
-ggdensity(GP_SVL$SVL, xlab = "G. porphyriticus SVL (mm)")
-
-ggqqplot(GP_SVL$SVL, title = "G. porphyriticus SVL (mm)")
+#filtering steps
+##keep only SAMPLING.METHOD == Flushed
+##remove TAXA == Unidentifiable Insect Parts *and* No gut contents
+##group by SPECIMEN.ID *and* PREY.CATEGORY
+##summarize total VOLUME
 
 
-# shapiro test for normality of salamander SVL
-
-shapiro.test(DF_SVL$SVL)
-shapiro.test(DO_SVL$SVL)
-shapiro.test(EB_SVL$SVL)
-shapiro.test(GP_SVL$SVL)
-
-
-# visualizing distribution of volume of each prey category consumed
-
-# AQUATIC
-ggdensity(DF_aquaticvol$VOLUME, xlab = "D. fuscus Aquatic Prey Volume")
-
-ggqqplot(DF_aquaticvol$VOLUME, title = "D. fuscus Aquatic Prey Volume")
-
-ggdensity(DO_aquaticvol$VOLUME, xlab = "D. ochrophaeus Aquatic Prey Volume")
-
-ggqqplot(DO_aquaticvol$VOLUME, title = "D. ochrophaeus Aquatic Prey Volume")
-
-ggdensity(EB_aquaticvol$VOLUME, xlab = "E. bislineata Aquatic Prey Volume")
-
-ggqqplot(EB_aquaticvol$VOLUME, title = "E. bislineata Aquatic Prey Volume")
+dietvolume <- saldata_raw %>%
+  filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%  #add whatever columns need to be kept
+  summarize(VOLUME = sum(VOLUME))
 
 
-# INTERMEDIATE
-ggdensity(DF_intvol$VOLUME, xlab = "D. fuscus Intermediate Prey Volume")
+#separate prey category into columns, add value = 0 for any prey categories not observed for a specimen
+dietvolume_by_preycategory <- dietvolume %>%
+  pivot_wider(names_from = PREY.CATEGORY,
+              values_from = VOLUME,
+              values_fill = 0,
+              names_prefix= "volume_")
 
-ggqqplot(DF_intvol$VOLUME, title = "D. fuscus Intermediate Prey Volume")
+#add total volume and calculate proportional volume for each prey category
+volume_diet_prop <- dietvolume_by_preycategory %>%
+  mutate(volume_total = sum(c_across(starts_with("volume")), na.rm=T)) %>%
+  mutate(prop_aquatic = volume_aquatic/volume_total, 
+         prop_terrestrial = volume_terrestrial/volume_total, 
+         prop_intermediate = volume_intermediate/volume_total, 
+         prop_neither = volume_neither/volume_total)
 
-ggdensity(DO_intvol$VOLUME, xlab = "D. ochrophaeus Intermediate Prey Volume")
-
-ggqqplot(DO_intvol$VOLUME, title = "D. ochrophaeus Intermediate Prey Volume")
-
-ggdensity(EB_intvol$VOLUME, xlab = "E. bislineata Intermediate Prey Volume")
-
-ggqqplot(EB_intvol$VOLUME, title = "E. bislineata Intermediate Prey Volume")
-
-
-# TERRESTRIAL
-ggdensity(DF_terrvol$VOLUME, xlab = "D. fuscus Terrestrial Prey Volume")
-
-ggqqplot(DF_terrvol$VOLUME, title = "D. fuscus Terrestrial Prey Volume")
-
-ggdensity(DO_terrvol$VOLUME, xlab = "D. ochrophaeus Terrestrial Prey Volume")
-
-ggqqplot(DO_terrvol$VOLUME, title = "D. ochrophaeus Terrestrial Prey Volume")
-
-ggdensity(EB_terrvol$VOLUME, xlab = "E. bislineata Terrestrial Prey Volume")
-
-ggqqplot(EB_terrvol$VOLUME, title = "E. bislineata Terrestrial Prey Volume")
-
-ggdensity(GP_terrvol$VOLUME, xlab = "G. porphyriticus Terrestrial Prey Volume")
-
-ggqqplot(GP_terrvol$VOLUME, title = "G. porphyriticus Terrestrial Prey Volume")
+#trying to get R to count the number of times each prey category is consumed by each individual salamander to replicate the GLM that had significant results
+#I want to get R to do this, but for the sake of getting this analysis done, I am uploading the csv
+#dietnumber <- saldata_raw %>%
+ # filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  #filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  #group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
+  #group_by()
 
 
-# NEITHER
-
-ggdensity(DF_neither$VOLUME, xlab = "D. fuscus Neither Prey Volume")
-
-ggqqplot(DF_neither$VOLUME, title = "D. fuscus Neither Prey Volume")
-
-ggdensity(DO_neither$VOLUME, xlab = "D. ochrophaeus Neither Prey Volume")
-
-ggqqplot(DO_neither$VOLUME, title = "D. ochrophaeus Neither Prey Volume")
-
-ggdensity(EB_neither$VOLUME, xlab = "E. bislineata Neither Prey Volume")
-
-ggqqplot(EB_neither$VOLUME, title = "E. bislineata Neither Prey Volume")
-
-
-# shapiro test for normality of prey volume consumed
-
-shapiro.test(DF_aquaticvol$VOLUME)
-shapiro.test(DF_intvol$VOLUME)
-shapiro.test(DF_terrvol$VOLUME)
-shapiro.test(DF_neither$VOLUME)
-
-shapiro.test(DO_aquaticvol$VOLUME)
-shapiro.test(DO_intvol$VOLUME)
-shapiro.test(DO_terrvol$VOLUME)
-shapiro.test(DO_neither$VOLUME)
-
-shapiro.test(EB_aquaticvol$VOLUME)
-shapiro.test(EB_intvol$VOLUME)
-shapiro.test(EB_terrvol$VOLUME)
-shapiro.test(EB_neither$VOLUME)
-
-
-shapiro.test(GP_terrvol$VOLUME)
-
-
+prey_category_count <- saldata_raw %>%
+  filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
+  summarize(n = n()) %>%
+  pivot_wider(names_from = PREY.CATEGORY, 
+              values_from = n,
+              values_fill = 0,
+              names_prefix = "count_") %>%
+  mutate(count_total = sum(c_across(starts_with("count")), na.rm=T)) %>%
+  mutate(propcount_aquatic = count_aquatic/count_total, 
+         propcount_terrestrial = count_terrestrial/count_total, 
+         propcount_intermediate = count_intermediate/count_total, 
+         propcount_neither = count_neither/count_total)
 ```
 
-# kruskal wallis volume of prey category ~ species
 
-```{r kruskal wallis volume of prey category ~ species}
+workflow for background sample count by prey category comparison
+```{r}
+#keep counts from prey_category_count
+#group by season
+#sum total number prey eaten within each category for each season
 
-# SVL
+prey_count_totals <- prey_category_count %>%
+  group_by(SEASON) %>%
+  summarize(total_aquatic = sum(count_aquatic),
+            total_terrestrial = sum(count_terrestrial),
+            total_intermediate = sum(count_intermediate),
+            total_neither = sum(count_neither))
+
+
+#from background samples
+#group by season
+#sum total number prey items observed from each prey category for each season
+
+# Keep getting the error "column 'prey_category' doesn't exist"
+BGS_count_totals <- background %>%
+  group_by(season) %>%
+  summarize(n = n()) %>%
+  pivot_wider(names_from = prey_category, 
+              values_from = n,
+              values_fill = 0,
+              names_prefix = "count_")
+
+#get total prey eaten (sum of all categories) from salamanders - per season
+#get total prey items documented (sum of all categories) from background - per season
+#get proportion of total prey items documented from each category (prop of total) - per season
+
+
+
+
+#calculate 'expected' number of prey eaten based on the total documented and category proportions
+
+#chi squared - salamander diets are observed, background estimated counts from proportions are expected
+```
+
+#stats
+
+```{r stats}
 kruskal.test(SVL ~ SPECIES,
              data = SVL)
 
+#KW examining volume of prey cat consumed as a function of SPECIES
 
-boxplot(SVL ~ SPECIES,
-        data = SVL,
-        xlab = "Species",
-        ylab = "SVL (mm)")
+# VOLUME aquatic ~ SPECIES
+kruskal.test(volume_aquatic ~ SPECIES,
+             data = dietvolume_by_preycategory)
 
-dunnTest(SVL ~ SPECIES,
-         data = SVL)
+dunnTest(volume_aquatic ~ SPECIES,
+         data = dietvolume_by_preycategory)
 
-# prey volume consumed ~ species
+# VOLUME intermediate ~ SPECIES
+kruskal.test(volume_intermediate ~ SPECIES,
+             data = dietvolume_by_preycategory)
 
-kruskal.test(VOLUME ~ SPECIES,
-             data = totalvol_aquatic)
+dunnTest(volume_intermediate ~ SPECIES,
+         data = dietvolume_by_preycategory)
 
-kruskal.test(VOLUME ~ SPECIES,
-             data = totalvol_int)
+# VOLUME terrestrial ~ SPECIES
+kruskal.test(volume_terrestrial ~ SPECIES,
+             data = dietvolume_by_preycategory)
 
-kruskal.test(VOLUME ~ SPECIES,
-             data = totalvol_terr)
+dunnTest(volume_terrestrial ~ SPECIES,
+         data = dietvolume_by_preycategory)
 
-kruskal.test(VOLUME ~ SPECIES,
-             data = totalvol_neither)
+# VOLUME neither ~ SPECIES
+kruskal.test(volume_neither ~ SPECIES,
+             data = dietvolume_by_preycategory)
 
-# these results are very different from what I got in posit cloud uploading a csv that was formatted in excel vs manipulating the data in R....
-dunnTest(VOLUME ~ SPECIES,
-         data = totalvol_aquatic)
-
-dunnTest(VOLUME ~ SPECIES,
-         data = totalvol_int)
-
-dunnTest(VOLUME ~ SPECIES,
-         data = totalvol_terr)
+dunnTest(volume_neither ~ SPECIES,
+         data = dietvolume_by_preycategory)
 
 
-# dot plots of prey category volumes
+#KW examining volume of prey cat consumed as a function of SVL
+#running a dunn test using SVL seems like a lot?
 
-ggplot(totalvol_aquatic,
-       aes(x = SPECIES, y = VOLUME)) +
-       geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
-       ggtitle("Aquatic Prey Volume")
+# VOLUME aquatic ~ SVL (p = 0.55)
+kruskal.test(volume_aquatic ~ SVL,
+             data = dietvolume_by_preycategory)
 
-ggplot(totalvol_int,
-       aes(x = SPECIES, y = VOLUME)) +
-       geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
-       ggtitle("Intermediate Prey Volume")
+dunnTest(volume_aquatic ~ SVL,
+         data = dietvolume_by_preycategory)
 
-ggplot(totalvol_terr,
-       aes(x = SPECIES, y = VOLUME)) +
-       geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
-       ggtitle("Terrestrial Prey Volume")
+# VOLUME intermediate ~ SVL (p = 0.6)
+kruskal.test(volume_intermediate ~ SVL,
+             data = dietvolume_by_preycategory)
 
-```
+# VOLUME terrestrial ~ SVL (p = 0.71)
+kruskal.test(volume_terrestrial ~ SVL,
+             data = dietvolume_by_preycategory)
 
-# kruskal wallis volume of prey category ~ SVL
+# VOLUME neither ~ SVL (p = 0.39)
+kruskal.test(volume_neither ~ SVL,
+             data = dietvolume_by_preycategory)
 
-```{r kruskal wallis volume of prey category ~ SVL}
 
-kruskal.test(VOLUME ~ SVL, data = totalvol_aquatic)
+#KW examining % NUMBER of prey cat consumed as a function of SEASON
+kruskal.test(count_aquatic ~ SEASON,
+             data = prey_category_count)
 
-kruskal.test(VOLUME ~ SVL, data = totalvol_int)
 
-kruskal.test(VOLUME ~ SVL, data = totalvol_terr)
+dunnTest(count_aquatic ~ SEASON,
+         data = prey_category_count)
+
+
+#feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
+ggplot(prey_category_count,
+  aes(x = SEASON, y = propcount_aquatic)) +
+  geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+  ggtitle("Proportion Aquatic Prey Number")
+
+
+#KW looking at NUMBER of prey cat consumed as function of SPECIES
+
+# NUMBER aquatic ~ SPECIES ( p = 0.03)
+kruskal.test(count_aquatic ~ SPECIES,
+             data = prey_category_count)
+
+# significant for DF compared to EB ** I had done this accidentally using propcount instead of count, it is N.S. with just count
+dunnTest(count_aquatic ~ SPECIES,
+         data = prey_category_count)
+
+# NUMBER intermediate ~ SPECIES (p = 0.77)
+kruskal.test(count_intermediate ~ SPECIES,
+             data = prey_category_count)
+# N.S.
+dunnTest(count_intermediate ~ SPECIES,
+         data = prey_category_count)
+
+# NUMBER terrestrial ~ SPECIES (p = 0.0001)
+kruskal.test(count_terrestrial ~ SPECIES,
+             data = prey_category_count)
+
+# significant for DF compared to EB, almost for DO to EB and GP to EB ** this is with the count, not prop count
+dunnTest(count_terrestrial ~ SPECIES,
+         data = prey_category_count)
 
 ```
 
 ```{r GLM on percent aquatic prey volume}
 
-glm <- car::Anova(glm(formula = percent.aquatic.vol ~ species + SVL + season, data = percent_preyvolume, family = binomial), type = 3)
+#still not significant and I think I figured out why. I think the file "diet ANOVA % aquatic" was originally used to run the GLM that gave significant results, and that was based on the NUMBER of each type of prey consumed, not the VOLUME.
+
+volume_glm <- car::Anova(glm(formula = prop_aquatic ~ SPECIES + SVL + SEASON,
+                      data = volume_diet_prop, family = binomial), type = 3)
+
+
+#uploaded that CSV and running GLM code on the proportion of NUMBER of prey type consumed
+#can't run with SVL because this was formatted from a pivot table using size class, need to get R to make this dataset but don't have time to figure it out right now
+
+number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
+                      data = prey_category_count, family = binomial), type = 3)
 
 ```
-
