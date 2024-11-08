@@ -73,7 +73,7 @@ prey_category_count <- saldata_raw %>%
   filter(SAMPLING.METHOD %in% c('Flushed')) %>%
   filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
   group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
-  summarize(n = n()) %>%
+  summarize(n = n()) %>% #  n = n means it's counting the number of observations i.e. the rows
   pivot_wider(names_from = PREY.CATEGORY, 
               values_from = n,
               values_fill = 0,
@@ -104,14 +104,15 @@ prey_count_totals <- prey_category_count %>%
 #group by season
 #sum total number prey items observed from each prey category for each season
 
-# Keep getting the error "column 'prey_category' doesn't exist"
+# Keep getting errors, have tried several approaches for this
 BGS_count_totals <- background %>%
-  group_by(season) %>%
-  summarize(n = n()) %>%
-  pivot_wider(names_from = prey_category, 
-              values_from = n,
+  group_by(season)
+  pivot_wider(names_from = prey_category,
+              values_from = number_individuals,
               values_fill = 0,
-              names_prefix = "count_")
+              names_prefix= "count_")
+  
+
 
 #get total prey eaten (sum of all categories) from salamanders - per season
 #get total prey items documented (sum of all categories) from background - per season
@@ -185,22 +186,6 @@ kruskal.test(volume_neither ~ SVL,
              data = dietvolume_by_preycategory)
 
 
-#KW examining % NUMBER of prey cat consumed as a function of SEASON
-kruskal.test(count_aquatic ~ SEASON,
-             data = prey_category_count)
-
-
-dunnTest(count_aquatic ~ SEASON,
-         data = prey_category_count)
-
-
-#feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
-ggplot(prey_category_count,
-  aes(x = SEASON, y = propcount_aquatic)) +
-  geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
-  ggtitle("Proportion Aquatic Prey Number")
-
-
 #KW looking at NUMBER of prey cat consumed as function of SPECIES
 
 # NUMBER aquatic ~ SPECIES ( p = 0.03)
@@ -226,18 +211,36 @@ kruskal.test(count_terrestrial ~ SPECIES,
 dunnTest(count_terrestrial ~ SPECIES,
          data = prey_category_count)
 
+
+#KW examining % NUMBER of prey cat consumed as a function of SEASON
+# all significant
+kruskal.test(count_aquatic ~ SEASON,
+             data = prey_category_count)
+
+
+dunnTest(count_aquatic ~ SEASON,
+         data = prey_category_count)
+
+#not sure why this figure is here?
+#feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
+ggplot(prey_category_count,
+  aes(x = SEASON, y = propcount_aquatic)) +
+  geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+  ggtitle("Proportion Aquatic Prey Number")
+
 ```
 
 ```{r GLM on percent aquatic prey volume}
 
-#still not significant and I think I figured out why. I think the file "diet ANOVA % aquatic" was originally used to run the GLM that gave significant results, and that was based on the NUMBER of each type of prey consumed, not the VOLUME.
+# GLM on the proportion of VOLUME of prey type consumed
+# N.S.
 
 volume_glm <- car::Anova(glm(formula = prop_aquatic ~ SPECIES + SVL + SEASON,
                       data = volume_diet_prop, family = binomial), type = 3)
 
 
-#uploaded that CSV and running GLM code on the proportion of NUMBER of prey type consumed
-#can't run with SVL because this was formatted from a pivot table using size class, need to get R to make this dataset but don't have time to figure it out right now
+# GLM on the proportion of NUMBER of prey type consumed
+# significant for season (p = 0.03)
 
 number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
                       data = prey_category_count, family = binomial), type = 3)
