@@ -52,13 +52,22 @@ dietvolume_by_preycategory <- dietvolume %>%
               values_fill = 0,
               names_prefix= "volume_")
 
+#remove temp file
+rm(dietvolume) 
+
 #add total volume and calculate proportional volume for each prey category
-volume_diet_prop <- dietvolume_by_preycategory %>%
+dietvolume_by_preycategory <- dietvolume_by_preycategory %>%
   mutate(volume_total = sum(c_across(starts_with("volume")), na.rm=T)) %>%
   mutate(prop_aquatic = volume_aquatic/volume_total, 
          prop_terrestrial = volume_terrestrial/volume_total, 
          prop_intermediate = volume_intermediate/volume_total, 
-         prop_neither = volume_neither/volume_total)
+         prop_neither = volume_neither/volume_total) %>%
+  mutate(aquatic_binary = ifelse(volume_aquatic > 0, "1", "0"))
+
+dietvolume_by_preycategory$aquatic_binary <- as.numeric(dietvolume_by_preycategory$aquatic_binary)
+dietvolume_by_preycategory <- as_tibble(dietvolume_by_preycategory)
+#from here, glm of aquatic_binary ~ SPECIES, family = binomial
+#then, filter new table to just the values binary = 1, do old glm just on those (prop aquatic diffs given that there was any aquatic)
 
 #trying to get R to count the number of times each prey category is consumed by each individual salamander to replicate the GLM that had significant results
 #I want to get R to do this, but for the sake of getting this analysis done, I am uploading the csv
@@ -105,13 +114,16 @@ prey_count_totals <- prey_category_count %>%
 #sum total number prey items observed from each prey category for each season
 
 # Keep getting errors, have tried several approaches for this
+#deletethis
 BGS_count_totals <- background %>%
-  group_by(season)
   pivot_wider(names_from = prey_category,
-              values_from = number_individuals,
-              values_fill = 0,
-              names_prefix= "count_")
+              values_from = number_individuals)
   
+
+#keep this as background summary
+totalcounts <- background %>%
+  group_by(season, prey_category) %>%
+  summarize(count = sum(number_individuals))
 
 
 #get total prey eaten (sum of all categories) from salamanders - per season
@@ -223,9 +235,9 @@ dunnTest(count_aquatic ~ SEASON,
 
 #not sure why this figure is here?
 #feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
-ggplot(prey_category_count,
-  aes(x = SEASON, y = propcount_aquatic)) +
-  geom_jitter(width = 0.01, size = 8, alpha = 0.1,) +
+ggplot(dietvolume_by_preycategory,
+  aes(x = SPECIES, y = prop_aquatic)) +
+  geom_jitter(width = 0.01, size = 8, alpha = 0.05) +
   ggtitle("Proportion Aquatic Prey Number")
 
 ```
@@ -235,8 +247,19 @@ ggplot(prey_category_count,
 # GLM on the proportion of VOLUME of prey type consumed
 # N.S.
 
-volume_glm <- car::Anova(glm(formula = prop_aquatic ~ SPECIES + SVL + SEASON,
-                      data = volume_diet_prop, family = binomial), type = 3)
+volume_glm <- car::Anova(glm(formula = volume_aquatic ~ SPECIES + SVL + SEASON,
+                      data = dietvolume_by_preycategory), type = 3)
+
+volume_glm
+
+
+
+#keep this glm, this one is now consistent with kw, it's the prop zeroes
+
+volume_glm2 <- car::Anova(glm(formula = aquatic_binary ~ SPECIES,
+                      data = dietvolume_by_preycategory, family = binomial), type = 3)
+
+volume_glm2
 
 
 # GLM on the proportion of NUMBER of prey type consumed
@@ -244,5 +267,15 @@ volume_glm <- car::Anova(glm(formula = prop_aquatic ~ SPECIES + SVL + SEASON,
 
 number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
                       data = prey_category_count, family = binomial), type = 3)
+number_glm
 
+
+
+
+# VOLUME aquatic ~ SPECIES
+kruskal.test(volume_aquatic ~ SPECIES,
+             data = dietvolume_by_preycategory)
+
+dunnTest(volume_aquatic ~ SPECIES,
+         data = dietvolume_by_preycategory)
 ```
