@@ -1,0 +1,140 @@
+---
+title: "Module2_wrangling"
+author: "Kelly Murman"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#Load libraries
+```{r load packages}
+library(tidyverse)
+library(vegan)
+library(stats)
+library(ggpubr)
+library(FSA)
+library(car)
+```
+
+```{r}
+bird_data <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\EJR-lessons\\cacao_birds_long.csv")
+str(bird_data)
+
+bird_data_wide <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\EJR-lessons\\cacao_birds_wide.csv")
+str(bird_data_wide)
+
+seeds <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\EJR-lessons\\seeds.csv") #load the data
+str(seeds) #look at the structure of the data frame
+head(seeds) #look at the first six rows of the data frame
+
+CO2 <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\EJR-lessons\\CO2.csv")
+
+orange <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\EJR-lessons\\orange.csv")
+
+inat <- read.csv("C:\\Users\\kmurm\\Documents\\GitHub\\EJR-lessons\\inaturalist_birds.csv")
+
+
+```
+
+```{r}
+#Note: there is a difference in R between one and two equals signs, = and ==. This function uses == to match the text from the habitat column.
+subset1 <- filter(bird_data, habitat=="rainforest")
+str(subset1)
+
+#So instead of using == above, we could filter() for rainforest rows by writing:
+subset1_alt <- filter(bird_data, habitat %in% "rainforest")
+str(subset1_alt)
+
+#This has produced an identical result to the previous code. Using %in% may be more efficient when you have many things you want to include in your filter.
+
+#Let's say we wanted to keep all rows in rainforest, cacao, and live fence, but exclude the riparian habitat. With our == format, we could write:
+
+subset_many <- filter(bird_data, habitat == "rainforest" | habitat == "cacao" | habitat == "live fence")
+str(subset_many)
+
+#It's kind of annoying to keep typing out habitat over and over! Instead, I could write:
+subset_many_alt <- filter(bird_data, habitat %in% c("rainforest", "cacao", "live fence"))
+str(subset_many_alt)
+
+#here, we are using the c() function to make a list (or column) of all the factors I want to match, instead of writing out each match separately.
+
+#Now let's remove some columns from our dataset. Let's say I want a table that only contains the habitat, the site_rep, and the species_count columns.
+subset2 <- select(bird_data, habitat, site_rep, species_count)
+str(subset2)
+
+mean(bird_data$species_count)
+sd(bird_data$species_count)
+
+summary <- summarize(bird_data, avg=mean(species_count))
+summary
+
+#Alone, that has made a very small table, with a single column and a single row. The column is named avg, because we typed 'avg' above. If I wanted to make a table where the column containing the average was called 'mean_birds', I could have typed mean_birds=mean(species_count)). There is one row, because we just calculated the average of all values.
+
+#That's not a very useful table yet. The real power of these functions comes in when you combine them together. The easiest way to do that is to use a tool called a pipe. We'll use these to make our summary of the number of bird species seen in March versus April.
+
+intermediate <- group_by(bird_data, survey_month)
+summary2 <- summarize(intermediate, avg=mean(species_count))
+summary2
+
+summary3 <- bird_data %>%
+  group_by(survey_month) %>%
+  summarize(avg=mean(species_count))
+
+summary3
+
+#We start by naming what we want the summary table to be called - in this case, summary3.
+
+#We then use the <- to 'assign' the output of our calculations to that table - everything that follows the <- will be put into the summary3 table.
+
+#We name the data frame we want to do our calculations on - bird_data.
+
+#We type our first pipe - the %>% symbol. This says "take the bird data, and move it to the next function.
+
+#On the next line, we list the first function. The first thing we want to to is group the data by survey month. All we have to type is group_by(survey_month) - we no longer have to say (bird_data, survey_month), because thanks to the pipe, R already knows what data we want it to use.
+
+#We're not actually interested in the results of group_by (remember, that's the two separate tables for each month). We just want to use that so we can summarize some data by month. Instead of saving the results of group_by, we're immediately sending those results to a second function, using another pipe %>%.
+
+#On the third line, we use our summarize() function. Again, we don't have to tell R what data to use, because it already knows to use the output of group_by (because of the pipe). It takes those grouped tables and calculates the mean species_count for each one, and puts the results in a column called average.
+
+#The last line just shows the summary3 table, to confirm we got what we wanted. It's exactly the same as the first approach, but this time we haven't had to save an intermediate table that we don't need to look at or keep.
+
+seeds_long <- pivot_longer(data = seeds, cols = c('Area', 'Perimeter', 'Compactness', 'Kernel.Length', 'Kernel.Width', 'Asymmetry.Coeff', 'Kernel.Groove'), names_to = "Variable", values_to = "Measurement")
+str(seeds_long)
+head(seeds_long)
+
+#Let's say we are only interested in information from the Quebec plants. Use the function that can subset rows to make a new data frame only containing rows for Quebec plants. Name this new data frame 'quebec'.
+
+quebec <- filter(CO2, Type %in% c('Quebec') )
+
+#Make a new data frame that only contains the Treatment, conc, and uptake columns.
+
+subsetCO2 <- select(CO2, Treatment, conc, uptake)
+
+#Calculate the mean uptake across all plants.
+
+meanuptake <- CO2 %>%
+  summarize(meanuptake = mean(uptake))
+
+#Make a summary table that gives the average CO2 uptake for each CO2 concentration ('conc').
+
+avgCO2 <- CO2 %>%
+  group_by(conc) %>%
+  summarize(avguptake=mean(uptake))
+
+#Rearrange the Orange dataset to a longer format by condensing the age and circumference information into a Variable column (which lists whether each row contains age or circumference information) and a Value column (containing the measurement of that variable). Save the results as an object named orange_long.
+
+orange_long <- pivot_longer(data = orange, cols = c('age', 'circumference'), names_to = "Variable", values_to = "Value")
+
+#Recreate the filtering from last week by making a new version of the data table that contains these species: Eastern Bluebird, Song Sparrow, Blue Jay, Common Yellowthroat, Tufted Titmouse, European Starling - and these states: Pennsylvania, Maine. Save the filtered table as an object, with a name of your choice.
+
+PAME_species <- inat %>%
+  filter(place_state_name %in% c('Pennsylvania', 'Maine')) %>%
+  filter(common_name %in% c('Eastern Bluebird', 'Song Sparrow', 'Blue Jay', 'Common Yellowthroat', 'Tufted Titmouse', 'European Starling'))
+
+#Recreate the data summary from last week by using pipes with the filter(), group_by(), and summarize() functions in order to make a data table that contains the number of each bird species seen in each week per state (again, using just the species and states listed above). You can look back at last week's code if you need to, but see how much you can figure out on your own first! If it helps, do each step separately before you try to attach them together with pipes.
+
+weeklyobs_per_state <- PAME_species %>%
+  group_by(observation_week, place_state_name, common_name) %>%
+  summarize(n = n())
+
+```
+
