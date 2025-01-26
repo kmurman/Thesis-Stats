@@ -225,9 +225,6 @@ dunnTest(volume_neither ~ SPECIES,
 kruskal.test(volume_aquatic ~ SVL,
              data = dietvolume_by_category)
 
-dunnTest(volume_aquatic ~ SVL,
-         data = dietvolume_by_category)
-
 # VOLUME intermediate ~ SVL (p = 0.6)
 kruskal.test(volume_intermediate ~ SVL,
              data = dietvolume_by_category)
@@ -275,6 +272,17 @@ kruskal.test(count_aquatic ~ SEASON,
 
 dunnTest(count_aquatic ~ SEASON,
          data = dietcount_by_category)
+
+kruskal.test(count_intermediate ~ SEASON,
+             data = dietcount_by_category)
+
+kruskal.test(count_terrestrial ~ SEASON,
+             data = dietcount_by_category)
+
+kruskal.test(count_neither ~ SEASON,
+             data = dietcount_by_category)
+
+
 
 #not sure why this figure is here?
 #feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
