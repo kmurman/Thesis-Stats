@@ -22,6 +22,8 @@ backsamps <- read.csv("BGS SITE MATRIX.csv")
 
 agebacksamps <- read.csv("BGS SITE MATRIX v2.csv")
 
+bgsxsals <- read.csv("BGS x Gut Contents.csv")
+
 ```
 
 #PCA of environmental background samples using FactoMineR and factoextra
@@ -114,6 +116,14 @@ fviz_pca(backsamps.pca, label = "none", geom.ind = "point", geom.var = "text")
 
 fviz_pca_biplot(backsamps.pca, label = "var", select.var = list(contrib = 10), habillage = as.factor(backsamps$samp.type), addEllipses = TRUE, repel = TRUE, palette = c("#00AFBB", "#E7B800"))
 
+
+```
+
+```{r BGS x gut contents}
+
+bgsxsals.pca <- PCA(bgsxsals, quali.sup = 1:4, graph = T)
+
+plotellipses(bgsxsals.pca)
 
 ```
 
