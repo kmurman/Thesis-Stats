@@ -120,10 +120,25 @@ fviz_pca_biplot(backsamps.pca, label = "var", select.var = list(contrib = 10), h
 ```
 
 ```{r BGS x gut contents}
+str(bgsxsals)
+bgsxsals$site <- as.factor(bgsxsals$site)
+bgsxsals$season <- as.factor(bgsxsals$season)
+bgsxsals$samp.type1 <- as.factor(bgsxsals$samp.type1)
+bgsxsals$samp.type2 <- as.factor(bgsxsals$samp.type2)
 
-bgsxsals.pca <- PCA(bgsxsals, quali.sup = 1:4, graph = T)
+bgsxsals2 <- bgsxsals %>%
+  select(!samp.type2)
+
+bgsxsals.pca <- PCA(bgsxsals2, quali.sup = 1:3, graph = T)
 
 plotellipses(bgsxsals.pca)
+
+bgsxsalsbysp <- bgsxsals %>%
+  select(!samp.type1)
+
+bgsxsalsbysp.pca <- PCA(bgsxsalsbysp, quali.sup = 1:3, graph = T)
+
+plotellipses(bgsxsalsbysp.pca)
 
 ```
 
