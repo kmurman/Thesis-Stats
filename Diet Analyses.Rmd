@@ -168,9 +168,7 @@ volume_glm2
 number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
                       data = dietcount_by_category, family = binomial), type = 3)
 number_glm
-
-
-
+                          
 
 # VOLUME aquatic ~ SPECIES
 kruskal.test(volume_aquatic ~ SPECIES,
@@ -180,7 +178,7 @@ dunnTest(volume_aquatic ~ SPECIES,
          data = dietvolume_by_category)
 ```
 
-```{r stats}
+```{r KW on VOLUME}
 kruskal.test(SVL ~ SPECIES,
              data = SVL)
 
@@ -237,38 +235,62 @@ kruskal.test(volume_terrestrial ~ SVL,
 kruskal.test(volume_neither ~ SVL,
              data = dietvolume_by_category)
 
+```
 
-#KW looking at NUMBER of prey cat consumed as function of SPECIES
+```{r KW on NUMBER}
+
+#KW looking at NUMBER (total count) of prey cat consumed as function of SPECIES
 
 # NUMBER aquatic ~ SPECIES ( p = 0.03)
 kruskal.test(count_aquatic ~ SPECIES,
              data = dietcount_by_category)
 
-# significant for DF compared to EB ** I had done this accidentally using propcount instead of count, it is N.S. with just count
+# not significant??
 dunnTest(count_aquatic ~ SPECIES,
          data = dietcount_by_category)
 
 # NUMBER intermediate ~ SPECIES (p = 0.77)
 kruskal.test(count_intermediate ~ SPECIES,
              data = dietcount_by_category)
-# N.S.
-dunnTest(count_intermediate ~ SPECIES,
-         data = dietcount_by_category)
+
 
 # NUMBER terrestrial ~ SPECIES (p = 0.0001)
 kruskal.test(count_terrestrial ~ SPECIES,
              data = dietcount_by_category)
 
-# significant for DF compared to EB, almost for DO to EB and GP to EB ** this is with the count, not prop count
+# significant for DF compared to EB** 
 dunnTest(count_terrestrial ~ SPECIES,
          data = dietcount_by_category)
 
+kruskal.test(count_neither ~ SPECIES,
+             data = dietcount_by_category)
 
-#KW examining % NUMBER of prey cat consumed as a function of SEASON
+
+#KW PROPORTION NUMBER ~ SPECIES
+kruskal.test(propcount_aquatic ~ SPECIES,
+             data = dietcount_by_category)
+
+dunnTest(propcount_aquatic ~ SPECIES,
+         data = dietcount_by_category)
+
+kruskal.test(propcount_intermediate ~ SPECIES,
+             data = dietcount_by_category)
+
+kruskal.test(propcount_terrestrial ~ SPECIES,
+             data = dietcount_by_category)
+
+dunnTest(propcount_terrestrial ~ SPECIES,
+         data = dietcount_by_category)
+
+kruskal.test(propcount_neither ~ SPECIES,
+             data = dietcount_by_category)
+
+
+
+#KW examining NUMBER of prey cat consumed as a function of SEASON
 # all significant
 kruskal.test(count_aquatic ~ SEASON,
              data = dietcount_by_category)
- 
 
 dunnTest(count_aquatic ~ SEASON,
          data = dietcount_by_category)
@@ -282,6 +304,31 @@ kruskal.test(count_terrestrial ~ SEASON,
 kruskal.test(count_neither ~ SEASON,
              data = dietcount_by_category)
 
+dunnTest(count_neither ~ SEASON,
+         data = dietcount_by_category)
+
+#KW proportion NUMBER ~ SEASON
+
+kruskal.test(propcount_aquatic ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(propcount_aquatic ~ SEASON,
+         data = dietcount_by_category)
+
+kruskal.test(propcount_intermediate ~ SEASON,
+             data = dietcount_by_category)
+
+kruskal.test(propcount_terrestrial ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(propcount_terrestrial ~ SEASON,
+         data = dietcount_by_category)
+
+kruskal.test(propcount_neither ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(propcount_neither ~ SEASON,
+         data = dietcount_by_category)
 
 
 #not sure why this figure is here?
@@ -292,8 +339,3 @@ ggplot(dietvolume_by_category,
   ggtitle("Proportion Aquatic Prey Number")
 
 ```
-
-```{r}
-
-```
-
