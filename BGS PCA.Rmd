@@ -3,6 +3,8 @@ title: "BGS PCA"
 author: "Kelly Murman"
 date: "`r Sys.Date()`"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r load packages, include = F}
@@ -161,12 +163,16 @@ anosim(x = m_com, grouping = backsamps$season, permutations = 9999, distance = "
 
 anosim(x = m_com, grouping = backsamps$samp.point, permutations = 9999, distance = "bray")
 
-bgsxsals_com <- bgsxsals [,3:ncol(bgsxsals2)]
+
+bgsxsals_nozero <- bgsxsals %>%
+  rowwise() %>%
+  filter(sum(c_across(Acalyptratae:Trichoptera)) != 0)
+
+bgsxsals_com <- bgsxsals_nozero[,5:ncol(bgsxsals_nozero)]
 
 bgsxsals_com <- as.matrix(bgsxsals_com)
 
-anosim(x = bgsxsals_com, grouping = bgsxsals2$samp.type1, permutations = 9999, distance
-        = "bray")
+anosim(x = bgsxsals_com, grouping = bgsxsals_nozero$samp.type2, permutations = 9999, distance = "bray")
 
 ```
 
