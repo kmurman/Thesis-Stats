@@ -161,6 +161,13 @@ anosim(x = m_com, grouping = backsamps$season, permutations = 9999, distance = "
 
 anosim(x = m_com, grouping = backsamps$samp.point, permutations = 9999, distance = "bray")
 
+bgsxsals_com <- bgsxsals [,3:ncol(bgsxsals2)]
+
+bgsxsals_com <- as.matrix(bgsxsals_com)
+
+anosim(x = bgsxsals_com, grouping = bgsxsals2$samp.type1, permutations = 9999, distance
+        = "bray")
+
 ```
 
 
