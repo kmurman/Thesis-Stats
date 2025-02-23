@@ -155,6 +155,8 @@ volume_glm
 
 
 #keep this glm, this one is now consistent with kw, it's the prop zeroes
+# significant for species (p = 0.0377108075)
+# significant for season (p = 0.0001557383)
 
 volume_glm2 <- car::Anova(glm(formula = aquatic_binary ~ SPECIES + SVL + SEASON,
                       data = dietvolume_by_category, family = binomial), type = 3)
@@ -170,12 +172,6 @@ number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASO
 number_glm
                           
 
-# VOLUME aquatic ~ SPECIES
-kruskal.test(volume_aquatic ~ SPECIES,
-             data = dietvolume_by_category)
-
-dunnTest(volume_aquatic ~ SPECIES,
-         data = dietvolume_by_category)
 ```
 
 ```{r KW on VOLUME}
@@ -185,39 +181,50 @@ kruskal.test(SVL ~ SPECIES,
 dunnTest(SVL ~ SPECIES,
          data = SVL)
 
-#KW examining VOLUME of prey cat consumed as a function of SPECIES
+#  VOLUME ~ SPECIES
 
-# VOLUME aquatic ~ SPECIES
 kruskal.test(volume_aquatic ~ SPECIES,
              data = dietvolume_by_category)
 
 dunnTest(volume_aquatic ~ SPECIES,
          data = dietvolume_by_category)
 
-# VOLUME intermediate ~ SPECIES
+
 kruskal.test(volume_intermediate ~ SPECIES,
              data = dietvolume_by_category)
 
-dunnTest(volume_intermediate ~ SPECIES,
-         data = dietvolume_by_category)
 
-# VOLUME terrestrial ~ SPECIES
 kruskal.test(volume_terrestrial ~ SPECIES,
              data = dietvolume_by_category)
 
-dunnTest(volume_terrestrial ~ SPECIES,
-         data = dietvolume_by_category)
 
-# VOLUME neither ~ SPECIES
 kruskal.test(volume_neither ~ SPECIES,
              data = dietvolume_by_category)
 
-dunnTest(volume_neither ~ SPECIES,
+# VOLUME ~ SEASON
+
+kruskal.test(volume_aquatic ~ SEASON,
+             data = dietvolume_by_category)
+
+dunnTest(volume_aquatic ~ SEASON,
          data = dietvolume_by_category)
 
 
-#KW examining VOLUME of prey cat consumed as a function of SVL
-#running a dunn test using SVL seems like a lot?
+kruskal.test(volume_intermediate ~ SEASON,
+             data = dietvolume_by_category)
+
+
+kruskal.test(volume_terrestrial ~ SEASON,
+             data = dietvolume_by_category)
+
+
+kruskal.test(volume_neither ~ SEASON,
+             data = dietvolume_by_category)
+
+dunnTest(volume_neither ~ SEASON,
+         data = dietvolume_by_category)
+
+# VOLUME ~ SVL (**should these even stay here? SVL was N.S. in both GLMs**)
 
 # VOLUME aquatic ~ SVL (p = 0.55)
 kruskal.test(volume_aquatic ~ SVL,
