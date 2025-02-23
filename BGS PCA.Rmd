@@ -60,13 +60,11 @@ varcos2 <- head(var$cos2, 84)
 
 corrplot(var$cos2, is.corr = FALSE)
 
-fviz_cos2(backsamps.pca, choice = "var", axes = 1:2)
+#this is terrible
+#fviz_cos2(backsamps.pca, choice = "var", axes = 1:2)
 
 # original archery target
 fviz_pca_var(backsamps.pca, col.var = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
-
-# graph of variables: default plot
-fviz_pca_var(backsamps.pca, col.var = "black")
 
 
 # control variable colors using their contributions
@@ -135,12 +133,40 @@ bgsxsals.pca <- PCA(bgsxsals2, quali.sup = 1:3, graph = T)
 
 plotellipses(bgsxsals.pca)
 
+get_eig(bgsxsals.pca)
+
+fviz_screeplot(bgsxsals.pca, addlabels = TRUE, ylim = c(0,15))
+
+# extract the results for variables
+var2 <- get_pca_var(bgsxsals.pca)
+var2
+
+# coordinates of variables
+head(var2$coord)
+varcoord2 <- head(var2$coord, 96)
+
+# contribution of variables
+varcontrib <- head(var$contrib, 84)
+
+fviz_pca_var(bgsxsals.pca, col.var = "cos2", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE)
+
+# contributions of variables to PC1
+fviz_contrib(bgsxsals.pca, choice = "var", axes = 1, top = 10)
+
+# contributions of variables to PC2
+fviz_contrib(bgsxsals.pca, choice = "var", axes = 2, top = 10)
+
+fviz_pca_biplot(bgsxsals.pca, label = "var", select.var = list(contrib = 10),
+                habillage = as.factor(bgsxsals2$samp.type1), addEllipses = TRUE, repel = TRUE, palette =
+                c("#00AFBB", "#E7B800", "#FC4E07"))
+
 bgsxsalsbysp <- bgsxsals %>%
   select(!samp.type1)
 
 bgsxsalsbysp.pca <- PCA(bgsxsalsbysp, quali.sup = 1:3, graph = T)
 
 plotellipses(bgsxsalsbysp.pca)
+
 
 ```
 
