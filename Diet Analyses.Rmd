@@ -170,7 +170,7 @@ volume_glm2
 number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
                       data = dietcount_by_category, family = binomial), type = 3)
 number_glm
-                          
+
 
 ```
 

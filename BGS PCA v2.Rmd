@@ -196,7 +196,18 @@ bgsxsals_com <- bgsxsals_nozero[,5:ncol(bgsxsals_nozero)]
 
 bgsxsals_com <- as.matrix(bgsxsals_com)
 
-anosim(x = bgsxsals_com, grouping = bgsxsals_nozero$samp.type2, permutations = 9999, distance = "bray")
+anosim(x = bgsxsals_com, grouping = bgsxsals_nozero$site, permutations = 9999,
+       distance = "bray")
+
+anosim(x = bgsxsals_com, grouping = bgsxsals_nozero$season, permutations = 9999,
+       distance = "bray")
+
+anosim(x = bgsxsals_com, grouping = bgsxsals_nozero$samp.type1, permutations =
+         9999, distance = "bray")
+
+anosim(x = bgsxsals_com, grouping = bgsxsals_nozero$samp.type2, permutations =
+         9999, distance = "bray")
+
 
 ```
 
