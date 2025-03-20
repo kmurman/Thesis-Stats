@@ -20,10 +20,11 @@ library(FactoMineR)
 ```
 
 #Load data
+# I found an error in the original CSV that had SGL 221 autofilled as 222 and 223. This separated a single individual (KMM008) into multiple data points when the proportion of prey categories was calculated. I corrected the error and now have different values for GLMs. 
 
 ```{r load data}
-saldata_raw <- read.csv("MASTER SPECIMEN CATALOG.csv")
 
+saldata_raw <- read.csv("MASTER SPECIMEN CATALOG.csv")
 
 ```
 
@@ -72,14 +73,6 @@ dietvolume_by_category <- as_tibble(dietvolume_by_category)
 #from here, glm of aquatic_binary ~ SPECIES, family = binomial
 #then, filter new table to just the values binary = 1, do old glm just on those (prop aquatic diffs given that there was any aquatic)
 
-#trying to get R to count the number of times each prey category is consumed by each individual salamander to replicate the GLM that had significant results
-#I want to get R to do this, but for the sake of getting this analysis done, I am uploading the csv
-#dietnumber <- saldata_raw %>%
- # filter(SAMPLING.METHOD %in% c('Flushed')) %>%
-  #filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
-  #group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
-  #group_by()
-
 
 dietcount_by_category <- saldata_raw %>%
   filter(SAMPLING.METHOD %in% c('Flushed')) %>%
@@ -99,31 +92,18 @@ dietcount_by_category <- saldata_raw %>%
 
 
 #stats
+
 ```{r GLM on percent aquatic prey volume}
 
-# GLM on the proportion of VOLUME of prey type consumed
-# * season only
-
-volume_glm <- car::Anova(glm(formula = volume_aquatic ~ SPECIES + SVL + SEASON,
-                      data = dietvolume_by_category), type = 3)
-
-volume_glm
-
-
-
-#keep this glm, this one is now consistent with kw, it's the prop zeroes
-# significant for species (p = 0.0377108075)
-# significant for season (p = 0.0001557383)
-
-volume_glm2 <- car::Anova(glm(formula = aquatic_binary ~ SPECIES + SVL + SEASON,
+# GLM on presence/absence of aquatic prey
+binary_glm <- car::Anova(glm(formula = aquatic_binary ~ SPECIES + SVL + SEASON,
                       data = dietvolume_by_category, family = binomial), type = 3)
 
-volume_glm2
+binary_glm
 
 
 # GLM on the proportion of NUMBER of prey type consumed
 # significant for season (p = 0.03)
-
 number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON,
                       data = dietcount_by_category, family = binomial), type = 3)
 number_glm
@@ -203,49 +183,63 @@ kruskal.test(volume_neither ~ SVL,
 
 ```{r KW on NUMBER}
 
+## For Emily!! Which is the correct way to run these? As raw count data, or as proportions?
+
+
+
 #KW looking at NUMBER (total count) of prey cat consumed as function of SPECIES
 
-# NUMBER aquatic ~ SPECIES ( p = 0.03)
+# p = 0.037
 kruskal.test(count_aquatic ~ SPECIES,
              data = dietcount_by_category)
 
-# not significant??
+#N.S??
 dunnTest(count_aquatic ~ SPECIES,
          data = dietcount_by_category)
 
-# NUMBER intermediate ~ SPECIES (p = 0.77)
+#N.S.
 kruskal.test(count_intermediate ~ SPECIES,
              data = dietcount_by_category)
 
 
-# NUMBER terrestrial ~ SPECIES (p = 0.0001)
+# p = 0.00004
 kruskal.test(count_terrestrial ~ SPECIES,
              data = dietcount_by_category)
 
-# significant for DF compared to EB** 
+# DF - EB, p = 0.00008276902
+# DO - EB, p = 0.03308029
+# EB - GP, p = 0.03463286
 dunnTest(count_terrestrial ~ SPECIES,
          data = dietcount_by_category)
 
+#N.S.
 kruskal.test(count_neither ~ SPECIES,
              data = dietcount_by_category)
 
 
 #KW PROPORTION NUMBER ~ SPECIES
+
+# p = 0.02
 kruskal.test(propcount_aquatic ~ SPECIES,
              data = dietcount_by_category)
 
+# DF - EB, p = 0.0457
 dunnTest(propcount_aquatic ~ SPECIES,
          data = dietcount_by_category)
 
+#N.S.
 kruskal.test(propcount_intermediate ~ SPECIES,
              data = dietcount_by_category)
 
+# p = 0.03
 kruskal.test(propcount_terrestrial ~ SPECIES,
              data = dietcount_by_category)
 
+#N.S. ??
 dunnTest(propcount_terrestrial ~ SPECIES,
          data = dietcount_by_category)
 
+#N.S.
 kruskal.test(propcount_neither ~ SPECIES,
              data = dietcount_by_category)
 
@@ -293,13 +287,5 @@ kruskal.test(propcount_neither ~ SEASON,
 
 dunnTest(propcount_neither ~ SEASON,
          data = dietcount_by_category)
-
-
-#not sure why this figure is here?
-#feels like species should be represented somehow, even though there was no significant difference in proportion aquatic prey consumed between species..
-ggplot(dietvolume_by_category,
-  aes(x = SPECIES, y = prop_aquatic)) +
-  geom_jitter(width = 0.01, size = 8, alpha = 0.05) +
-  ggtitle("Proportion Aquatic Prey Number")
 
 ```
