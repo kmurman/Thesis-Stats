@@ -1,0 +1,408 @@
+---
+title: "Diet Analyses"
+author: "Kelly Murman"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#Load libraries
+```{r load packages}
+
+library(tidyverse)
+library(vegan)
+library(stats)
+library(ggpubr)
+library(FSA)
+library(car)
+library(factoextra)
+library(FactoMineR)
+
+```
+
+#Load data
+# I found an error in the original CSV that had SGL 221 autofilled as 222 and 223. This separated a single individual (KMM008) into multiple data points when the proportion of prey categories was calculated. I corrected the error and now have different values for GLMs. 
+
+```{r load data}
+
+saldata_raw <- read.csv("MASTER SPECIMEN CATALOG.csv")
+
+```
+
+#Make summary table of diet volume and number by diet environment per salamander
+
+```{r yee haw}
+#remove duplicates for SVL data
+SVL <- saldata_raw %>% select(SPECIES, SPECIMEN.ID, SVL) %>%
+  distinct()
+
+#filtering steps
+##keep only SAMPLING.METHOD == Flushed
+##remove TAXA == Unidentifiable Insect Parts *and* No gut contents
+##group by SPECIMEN.ID *and* PREY.CATEGORY
+##summarize total VOLUME
+
+
+dietvolume <- saldata_raw %>%
+  filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  filter(!SPECIES %in% c('G. porphyriticus')) %>%
+  group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%  #add whatever columns need to be kept
+  summarize(VOLUME = sum(VOLUME))
+
+
+#separate prey category into columns, add value = 0 for any prey categories not observed for a specimen
+dietvolume_by_category <- dietvolume %>%
+  pivot_wider(names_from = PREY.CATEGORY,
+              values_from = VOLUME,
+              values_fill = 0,
+              names_prefix= "volume_")
+
+#remove temp file
+rm(dietvolume) 
+
+#add total volume and calculate proportional volume for each prey category
+dietvolume_by_category <- dietvolume_by_category %>%
+  mutate(volume_total = sum(c_across(starts_with("volume")), na.rm=T)) %>%
+  mutate(prop_aquatic = volume_aquatic/volume_total, 
+         prop_terrestrial = volume_terrestrial/volume_total, 
+         prop_intermediate = volume_intermediate/volume_total, 
+         prop_neither = volume_neither/volume_total) %>%
+  mutate(aquatic_binary = ifelse(volume_aquatic > 0, "1", "0"))
+
+dietvolume_by_category$aquatic_binary <- as.numeric(dietvolume_by_category$aquatic_binary)
+dietvolume_by_category <- as_tibble(dietvolume_by_category)
+#from here, glm of aquatic_binary ~ SPECIES, family = binomial
+#then, filter new table to just the values binary = 1, do old glm just on those (prop aquatic diffs given that there was any aquatic)
+
+
+dietcount_by_category <- saldata_raw %>%
+  filter(SAMPLING.METHOD %in% c('Flushed')) %>%
+  filter(!TAXA %in% c('Unidentifiable Insect Parts', 'No gut contents')) %>%
+  filter(!SPECIES %in% c('G. porphyriticus')) %>%
+  group_by(SITE, SEASON, SPECIES, SVL, SPECIMEN.ID, PREY.CATEGORY) %>%
+  summarize(n = n()) %>% #  n = n means it's counting the number of observations i.e. the rows
+  pivot_wider(names_from = PREY.CATEGORY, 
+              values_from = n,
+              values_fill = 0,
+              names_prefix = "count_") %>%
+  mutate(count_total = sum(c_across(starts_with("count")), na.rm=T)) %>%
+  mutate(propcount_aquatic = count_aquatic/count_total, 
+         propcount_terrestrial = count_terrestrial/count_total, 
+         propcount_intermediate = count_intermediate/count_total, 
+         propcount_neither = count_neither/count_total)
+```
+
+```{r normality tests}
+
+# SVL
+DF_SVL <- SVL %>%
+  filter(SPECIES %in% c('D. fuscus'))
+
+shapiro.test(DF_SVL$SVL)
+
+DO_SVL <- SVL %>%
+  filter(SPECIES %in% c('D. ochrophaeus'))
+
+shapiro.test(DO_SVL$SVL)
+
+EB_SVL <- SVL %>%
+  filter(SPECIES %in% c('E. bislineata'))
+
+shapiro.test(EB_SVL$SVL)
+
+GP_SVL <- SVL %>%
+  filter(SPECIES %in% c('G. porphyriticus'))
+
+shapiro.test(GP_SVL$SVL)
+
+# Prey Number
+
+DF_number <- dietcount_by_category %>%
+  filter(SPECIES %in% c('D. fuscus'))
+
+shapiro.test(DF_number$count_aquatic)
+
+shapiro.test(DF_number$count_intermediate)
+
+shapiro.test(DF_number$count_terrestrial)
+
+shapiro.test(DF_number$count_neither)
+
+DO_number <- dietcount_by_category %>%
+  filter(SPECIES %in% c('D. ochrophaeus'))
+
+shapiro.test(DO_number$count_aquatic)
+
+shapiro.test(DO_number$count_intermediate)
+
+shapiro.test(DO_number$count_terrestrial)
+
+shapiro.test(DO_number$count_neither)
+
+EB_number <- dietcount_by_category %>%
+  filter(SPECIES %in% c('E. bislineata'))
+
+shapiro.test(EB_number$count_aquatic)
+
+shapiro.test(EB_number$count_intermediate)
+
+shapiro.test(EB_number$count_terrestrial)
+
+shapiro.test(EB_number$count_neither)
+
+# Can't run on GP because all values are identical
+#GP_number <- dietcount_by_category %>%
+  #filter(SPECIES %in% c('G. porphyriticus'))
+
+#shapiro.test(GP_number$count_aquatic)
+
+#shapiro.test(GP_number$count_intermediate)
+
+#shapiro.test(GP_number$count_terrestrial)
+
+#shapiro.test(GP_number$count_neither)
+
+
+# VOLUME NORMALITY
+
+DF_vol <- dietvolume_by_category %>%
+  filter(SPECIES %in% c('D. fuscus'))
+
+shapiro.test(DF_vol$volume_aquatic)
+
+shapiro.test(DF_vol$volume_intermediate)
+
+shapiro.test(DF_vol$volume_terrestrial)
+
+shapiro.test(DF_vol$volume_neither)
+
+DO_vol <- dietvolume_by_category %>%
+  filter(SPECIES %in% c('D. ochrophaeus'))
+
+shapiro.test(DO_vol$volume_aquatic)
+
+shapiro.test(DO_vol$volume_intermediate)
+
+shapiro.test(DO_vol$volume_terrestrial)
+
+shapiro.test(DO_vol$volume_neither)
+
+EB_vol <- dietvolume_by_category %>%
+  filter(SPECIES %in% c('E. bislineata'))
+
+shapiro.test(EB_vol$volume_aquatic)
+
+shapiro.test(EB_vol$volume_intermediate)
+
+shapiro.test(EB_vol$volume_terrestrial)
+
+shapiro.test(EB_vol$volume_neither)
+
+GP_vol <- dietvolume_by_category %>%
+  filter(SPECIES %in% c('G. porphyriticus'))
+
+shapiro.test(GP_vol$volume_terrestrial)
+
+```
+
+
+#stats
+
+```{r GLM on percent aquatic prey volume}
+
+# GLM on presence/absence of aquatic prey
+binary_glm <- car::Anova(glm(formula = aquatic_binary ~ SPECIES + SVL + SEASON, data = dietvolume_by_category, family = binomial), type = 3)
+
+binary_glm
+
+
+# GLM on the proportion of NUMBER of prey type consumed
+# significant for season (p = 0.03)
+number_glm <- car::Anova(glm(formula = propcount_aquatic ~ SPECIES + SVL + SEASON, data = dietcount_by_category, family = binomial), type = 3)
+
+number_glm
+
+
+```
+
+```{r KW on VOLUME}
+kruskal.test(SVL ~ SPECIES,
+             data = SVL)
+
+dunnTest(SVL ~ SPECIES,
+         data = SVL)
+
+#  VOLUME ~ SPECIES
+
+kruskal.test(volume_aquatic ~ SPECIES,
+             data = dietvolume_by_category)
+
+dunnTest(volume_aquatic ~ SPECIES,
+         data = dietvolume_by_category)
+
+
+kruskal.test(volume_intermediate ~ SPECIES,
+             data = dietvolume_by_category)
+
+
+kruskal.test(volume_terrestrial ~ SPECIES,
+             data = dietvolume_by_category)
+
+
+kruskal.test(volume_neither ~ SPECIES,
+             data = dietvolume_by_category)
+
+# VOLUME ~ SEASON
+
+kruskal.test(volume_aquatic ~ SEASON,
+             data = dietvolume_by_category)
+
+dunnTest(volume_aquatic ~ SEASON,
+         data = dietvolume_by_category)
+
+
+kruskal.test(volume_intermediate ~ SEASON,
+             data = dietvolume_by_category)
+
+
+kruskal.test(volume_terrestrial ~ SEASON,
+             data = dietvolume_by_category)
+
+
+kruskal.test(volume_neither ~ SEASON,
+             data = dietvolume_by_category)
+
+kruskal.test(volume_neither ~ SEASON,
+             data = dietvolume_by_category)
+
+dunnTest(volume_neither ~ SEASON,
+         data = dietvolume_by_category)
+
+# VOLUME ~ SVL (**should these even stay here? SVL was N.S. in both GLMs**)
+
+# VOLUME aquatic ~ SVL (p = 0.55)
+kruskal.test(volume_aquatic ~ SVL,
+             data = dietvolume_by_category)
+
+# VOLUME intermediate ~ SVL (p = 0.6)
+kruskal.test(volume_intermediate ~ SVL,
+             data = dietvolume_by_category)
+
+# VOLUME terrestrial ~ SVL (p = 0.71)
+kruskal.test(volume_terrestrial ~ SVL,
+             data = dietvolume_by_category)
+
+# VOLUME neither ~ SVL (p = 0.39)
+kruskal.test(volume_neither ~ SVL,
+             data = dietvolume_by_category)
+
+```
+
+```{r KW on NUMBER}
+
+## For Emily!! Which is the correct way to run these? As raw count data, or as proportions?
+
+
+
+#KW looking at NUMBER (total count) of prey cat consumed as function of SPECIES
+
+# p = 0.037
+kruskal.test(count_aquatic ~ SPECIES,
+             data = dietcount_by_category)
+
+#N.S??
+dunnTest(count_aquatic ~ SPECIES,
+         data = dietcount_by_category)
+
+#N.S.
+kruskal.test(count_intermediate ~ SPECIES,
+             data = dietcount_by_category)
+
+
+# p = 0.00004
+kruskal.test(count_terrestrial ~ SPECIES,
+             data = dietcount_by_category)
+
+# DF - EB, p = 0.00008276902
+# DO - EB, p = 0.03308029
+# EB - GP, p = 0.03463286
+dunnTest(count_terrestrial ~ SPECIES,
+         data = dietcount_by_category)
+
+#N.S.
+kruskal.test(count_neither ~ SPECIES,
+             data = dietcount_by_category)
+
+
+#KW PROPORTION NUMBER ~ SPECIES
+
+# p = 0.02
+kruskal.test(propcount_aquatic ~ SPECIES,
+             data = dietcount_by_category)
+
+# DF - EB, p = 0.0457
+dunnTest(propcount_aquatic ~ SPECIES,
+         data = dietcount_by_category)
+
+#N.S.
+kruskal.test(propcount_intermediate ~ SPECIES,
+             data = dietcount_by_category)
+
+# p = 0.03
+kruskal.test(propcount_terrestrial ~ SPECIES,
+             data = dietcount_by_category)
+
+#N.S. ??
+dunnTest(propcount_terrestrial ~ SPECIES,
+         data = dietcount_by_category)
+
+#N.S.
+kruskal.test(propcount_neither ~ SPECIES,
+             data = dietcount_by_category)
+
+
+
+#KW examining NUMBER of prey cat consumed as a function of SEASON
+# all significant
+kruskal.test(count_aquatic ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(count_aquatic ~ SEASON,
+         data = dietcount_by_category)
+
+kruskal.test(count_intermediate ~ SEASON,
+             data = dietcount_by_category)
+
+kruskal.test(count_terrestrial ~ SEASON,
+             data = dietcount_by_category)
+
+kruskal.test(count_neither ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(count_neither ~ SEASON,
+         data = dietcount_by_category)
+
+#KW proportion NUMBER ~ SEASON
+
+kruskal.test(propcount_aquatic ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(propcount_aquatic ~ SEASON,
+         data = dietcount_by_category)
+
+kruskal.test(propcount_intermediate ~ SEASON,
+             data = dietcount_by_category)
+
+kruskal.test(propcount_terrestrial ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(propcount_terrestrial ~ SEASON,
+         data = dietcount_by_category)
+
+kruskal.test(propcount_neither ~ SEASON,
+             data = dietcount_by_category)
+
+dunnTest(propcount_neither ~ SEASON,
+         data = dietcount_by_category)
+
+```
